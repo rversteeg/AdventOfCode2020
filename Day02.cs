@@ -32,7 +32,7 @@ namespace AdventOfCode2020
 
         private bool MatchesPosition(Input input)
         {
-            return input.Password[input.Min -1] == input.Char ^ input.Password[input.Max - 1] == input.Char;
+            return input.Password[input.Min - 1] == input.Char ^ input.Password[input.Max - 1] == input.Char;
         }
 
         public Input[] ReadInput()
