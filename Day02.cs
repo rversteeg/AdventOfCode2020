@@ -37,7 +37,7 @@ namespace AdventOfCode2020
 
         public Input[] ReadInput()
         {
-            return File.ReadAllLines(@"Input\Day02\Part1.txt").Select(x =>
+            return ReadAllInputLines().Select(x =>
             {
                 var parts = x.Split(new char[] {'-', ' ', ':'}, StringSplitOptions.RemoveEmptyEntries);
 

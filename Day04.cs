@@ -78,7 +78,7 @@ namespace AdventOfCode2020
         public IEnumerable<Document> ReadInput()
         {
             var claims = new Dictionary<string, string>();
-            var lines = File.ReadAllLines(@"Input\Day04\Part1.txt");
+            var lines = ReadAllInputLines();
 
             foreach (var line in lines)
             {

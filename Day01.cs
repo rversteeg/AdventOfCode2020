@@ -47,7 +47,7 @@ namespace AdventOfCode2020
 
         public int[] ReadInput()
         {
-            return File.ReadAllLines(@"Input\Day01\Part1.txt").Select(Int32.Parse).ToArray();
+            return ReadAllInputLines().Select(Int32.Parse).ToArray();
         }
     }
 }
