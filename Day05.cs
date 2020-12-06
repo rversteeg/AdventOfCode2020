@@ -19,12 +19,13 @@ namespace AdventOfCode2020
         {
             var seats = ReadAllInputLines().Select(ParseSeatId).OrderBy(x=>x).ToArray();
 
-            for(int i = 0; i < seats.Length - 1;i++)
+            for (int i = 0; i < seats.Length - 1;i++)
                 if (seats[i + 1] - seats[i] > 1)
                     return (seats[i] + 1).ToString();
 
             return "Seat Not Found";
         }
+        
         private int ParseSeatId(string seat) => Convert.ToInt32(ToBinary(seat), 2);
 
         private string ToBinary(string seat) =>

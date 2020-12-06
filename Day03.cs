@@ -21,7 +21,7 @@ namespace AdventOfCode2020
             var slopes = new [] {(1,1), (3, 1), (5, 1), (7, 1), (1, 2)};
 
             var result = slopes.Select(slope => NrOfTrees(input, slope))
-                .Aggregate(1l, (x, y) => x * y);
+                .Aggregate(1L, (x, y) => x * y);
             return result.ToString();
         }
 
