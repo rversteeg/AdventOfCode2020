@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 
@@ -10,16 +11,23 @@ namespace AdventOfCode2020
     {
         static void Main(string[] args)
         {
-            var latestDay = GetSolutions().OrderByDescending(x=>x.Day).FirstOrDefault();
+            var allDays = GetSolutions().OrderByDescending(x => x.Day);
 
-            if (latestDay == null)
+            foreach (var day in allDays)
             {
-                Console.WriteLine("No solutions in project");
-                return;
+                Stopwatch sw = new Stopwatch();
+                sw.Start();
+                var part1Answer = day.SolvePart1();
+                var part1Time = sw.Elapsed;
+                sw.Restart();
+                var part2Answer = day.SolvePart2();
+                var part2Time = sw.Elapsed;
+                sw.Stop();
+                Console.WriteLine($@"-- Day {day.Day:D2}
+Part1: {part1Answer} ( Took {part1Time} )
+Part2: {part2Answer} ( Took {part2Time} )
+");
             }
-
-            Console.WriteLine($"Part1: {latestDay.SolvePart1()}");
-            Console.WriteLine($"Part2: {latestDay.SolvePart2()}");
         }
 
         private static IEnumerable<IPuzzleSolution> GetSolutions()

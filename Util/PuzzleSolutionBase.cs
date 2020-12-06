@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace AdventOfCode2020
+namespace AdventOfCode2020.Util
 {
     public abstract class PuzzleSolutionBase : IPuzzleSolution
     {
@@ -11,12 +11,12 @@ namespace AdventOfCode2020
             Day = day;
         }
 
-        public virtual string SolvePart1()
+        public virtual object SolvePart1()
         {
             return null;
         }
 
-        public virtual string SolvePart2()
+        public virtual object SolvePart2()
         {
             return null;
         }

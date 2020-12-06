@@ -4,7 +4,7 @@
     {
         public int Day { get; }
 
-        string SolvePart1();
-        string SolvePart2();
+        object SolvePart1();
+        object SolvePart2();
     }
 }

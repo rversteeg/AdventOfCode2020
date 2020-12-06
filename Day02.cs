@@ -1,50 +1,32 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
+using AdventOfCode2020.Util;
 
 namespace AdventOfCode2020
 {
-    public class Day02 : PuzzleSolutionBase
+    public class Day02 : PuzzleSolutionWithParsedInput<Day02.Day2Record[]>
     {
-        public Day02() : base(2)
-        {
-        }
+        public Day02() : base(2) {}
 
-        public override string SolvePart1()
-        {
-            var input = ReadInput();
+        public override object SolvePart1(Day2Record[] input) => input.Count(MatchesCount);
 
-            return input.Count(MatchesCount).ToString();
-        }
-
-        private bool MatchesCount(Input input)
+        private bool MatchesCount(Day2Record input)
         {
             var count = input.Password.Count(chr => chr == input.Char);
             return count >= input.Min && count <= input.Max;
         }
 
-        public override string SolvePart2()
-        {
-            var input = ReadInput();
+        public override object SolvePart2(Day2Record[] input)
+                => input.Count(MatchesPosition);
 
-            return input.Count(MatchesPosition).ToString();
-        }
+        private bool MatchesPosition(Day2Record input) 
+            => input.Password[input.Min - 1] == input.Char ^ input.Password[input.Max - 1] == input.Char;
 
-        private bool MatchesPosition(Input input)
-        {
-            return input.Password[input.Min - 1] == input.Char ^ input.Password[input.Max - 1] == input.Char;
-        }
+        protected override Day2Record[] Parse()
+            => (from line in ReadAllInputLines()
+                let parts = line.Split(new[] {'-', ' ', ':'}, StringSplitOptions.RemoveEmptyEntries)
+                select new Day2Record(int.Parse(parts[0]), int.Parse(parts[1]), parts[2][0], parts[3])).ToArray();
 
-        public Input[] ReadInput()
-        {
-            return ReadAllInputLines().Select(x =>
-            {
-                var parts = x.Split(new char[] {'-', ' ', ':'}, StringSplitOptions.RemoveEmptyEntries);
-
-                return new Input(Int32.Parse(parts[0]), Int32.Parse(parts[1]), parts[2][0], parts[3]);
-            }).ToArray();
-        }
-
-        public record Input(int Min, int Max, int Char, string Password);
+        public record Day2Record(int Min, int Max, int Char, string Password);
     }
 }

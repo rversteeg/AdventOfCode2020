@@ -1,37 +1,35 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
+using AdventOfCode2020.Util;
 
 namespace AdventOfCode2020
 {
-    public class Day06 : PuzzleSolutionBase
+    public class Day06 : PuzzleSolutionWithParsedInput<string[][]>
     {
         public Day06() : base(6) {}
 
-        public override string SolvePart1()
+        public override object SolvePart1(string[][] input)
         {
-            return GetInput()
+            return input
                 .Select(grp => 
                     grp.SelectMany(x => x)
                         .ToLookup(x => x).Count)
-                .Sum().ToString();
+                .Sum();
         }
 
-        public override string SolvePart2()
+        public override object SolvePart2(string[][] input)
         {
-            return GetInput()
+            return input
                 .Select(grp => 
                     grp.SelectMany(x => x)
                         .ToLookup(x => x)
                         .Count(x=>x.Count() == grp.Length))
-                .Sum().ToString();
+                .Sum();
         }
 
-        private string[][] GetInput()
-        {
-            return ReadAllInputText().Split($"{Environment.NewLine}{Environment.NewLine}")
-                .Select(group => group.Split($"{Environment.NewLine}", StringSplitOptions.RemoveEmptyEntries)).ToArray();
-        }
+        protected override string[][] Parse()
+            => ReadAllInputText().Split($"{Environment.NewLine}{Environment.NewLine}")
+                .Select(group => group.Split($"{Environment.NewLine}")).ToArray();
 
     }
 }
