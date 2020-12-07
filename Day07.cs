@@ -12,27 +12,17 @@ namespace AdventOfCode2020
         
         public Day07() : base(7) { }
 
-        public override object
-            SolvePart1(Rule[] input)
-        {
-            return input.Count(rule => ContainsColor(rule.Color, "shiny gold", input.ToDictionary(x => x.Color)));
-        }
+        public override object SolvePart1(Rule[] input)
+            => input.Count(rule => ContainsColor(rule.Color, "shiny gold", input.ToDictionary(x => x.Color)));
 
         private bool ContainsColor(string color, string containedColor, Dictionary<string, Rule> rules)
-        {
-            return rules[color].Requirements.Any(req =>
-                req.Color == containedColor || ContainsColor(req.Color, containedColor, rules));
-        }
+            => rules[color].Requirements.Any(req => req.Color == containedColor || ContainsColor(req.Color, containedColor, rules));
 
-        public override object SolvePart2(Rule[] input)
-        {
-            return ContainedBags("shiny gold", input.ToDictionary(x => x.Color));
-        }
+        public override object SolvePart2(Rule[] input) 
+            => ContainedBags("shiny gold", input.ToDictionary(x => x.Color));
 
         private int ContainedBags(string color, Dictionary<string, Rule> rules)
-        {
-            return rules[color].Requirements.Sum(requirement => requirement.Number + ContainedBags(requirement.Color, rules)*requirement.Number);
-        }
+            => rules[color].Requirements.Sum(requirement => requirement.Number + ContainedBags(requirement.Color, rules)*requirement.Number);
 
         protected override Rule[] Parse()
             => ReadInput().ToArray();
