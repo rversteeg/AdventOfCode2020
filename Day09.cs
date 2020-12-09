@@ -21,7 +21,7 @@ namespace AdventOfCode2020
 
         private bool IsValid(int index, long[] input)
         {
-            var preamble = input.Skip(index - preambleLength).Take(preambleLength).ToImmutableList();
+            var preamble = input[(index - preambleLength)..index];
             var set = new SortedSet<long>(preamble);
 
             return preamble.Any(x=>set.Contains(input[index]-x));
