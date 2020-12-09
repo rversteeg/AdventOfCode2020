@@ -21,10 +21,8 @@ namespace AdventOfCode2020
 
         private bool IsValid(int index, long[] input)
         {
-            var preamble = input[(index - preambleLength)..index];
-            var set = new SortedSet<long>(preamble);
-
-            return preamble.Any(x=>set.Contains(input[index]-x));
+            var preamble = new HashSet<long>(input[(index - preambleLength)..index]);
+            return preamble.Any(x=> preamble.Contains(input[index]-x));
         }
 
         public override object SolvePart2(long[] input)
