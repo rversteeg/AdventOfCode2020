@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
+using System.Security.Cryptography.X509Certificates;
 using AdventOfCode2020.Util;
 
 namespace AdventOfCode2020
@@ -31,7 +33,7 @@ namespace AdventOfCode2020
 
         public override object SolvePart2(int[] input)
         {
-            return Combinations(0, input.Distinct().OrderBy(x => x).ToImmutableList());
+            return Combinations(0, input.OrderBy(x => x).ToImmutableList());
         }
 
 
