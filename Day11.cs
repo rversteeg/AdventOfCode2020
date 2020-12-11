@@ -7,6 +7,7 @@ namespace AdventOfCode2020
 {
     public class Day11 : PuzzleSolutionWithParsedInput<char[,]>
     {
+        private const char Floor = '.';
         private const char FreeSeat = 'L';
         private const char TakenSeat = '#';
 
@@ -14,57 +15,46 @@ namespace AdventOfCode2020
 
         public override object SolvePart1(char[,] input)
         {
-            var positions = Positions(input).ToArray();
+            var seatPositions = Positions(input).Where(pos=>input[pos.x,pos.y] != Floor).ToArray();
 
             while (true)
             {
-                var swap = positions.Where(pos =>
+                var swap = seatPositions.Where(pos =>
                     input[pos.x, pos.y] == FreeSeat && AdjacentTaken(input, pos) == 0 ||
                     input[pos.x, pos.y] == TakenSeat && AdjacentTaken(input, pos) >= 4).ToList();
 
                 if (!swap.Any())
                     break;
 
-
                 swap.ForEach(pos => input[pos.x, pos.y] = input[pos.x, pos.y] == FreeSeat ? TakenSeat : FreeSeat);
             }
 
-            return positions.Count(x => input[x.x, x.y] == TakenSeat);
+            return seatPositions.Count(x => input[x.x, x.y] == TakenSeat);
         }
 
         public override object SolvePart2(char[,] input)
         {
-            var positions = Positions(input).ToArray();
+            var seatPositions = Positions(input).Where(pos => input[pos.x, pos.y] != Floor).ToArray();
 
             while (true)
             {
-                var swap = positions.Where(pos =>
+                var swap = seatPositions.Where(pos =>
                     input[pos.x, pos.y] == FreeSeat && VisibleTaken(input, pos) == 0 ||
                     input[pos.x, pos.y] == TakenSeat && VisibleTaken(input, pos) >= 5).ToList();
 
                 if (!swap.Any())
                     break;
 
-
                 swap.ForEach(pos => input[pos.x, pos.y] = input[pos.x, pos.y] == FreeSeat ? TakenSeat : FreeSeat);
             }
 
-            return positions.Count(x => input[x.x, x.y] == TakenSeat);
+            return seatPositions.Count(x => input[x.x, x.y] == TakenSeat);
         }
 
         private IEnumerable<(int x, int y)> Positions(char[,] plan) =>
             from x in Enumerable.Range(0, plan.GetLength(0))
             from y in Enumerable.Range(0, plan.GetLength(1))
             select (x, y);
-
-        private static int AdjacentTaken(char[,] plan, (int x, int y) pos)
-            => AdjacentLocations(pos).Count(x => IsTaken(plan, x));
-
-        private static IEnumerable<(int x, int y)> AdjacentLocations((int x, int y) pos)
-            => Directions.Select(dir => (pos.x + dir.x, pos.y + dir.y));
-
-        private static bool IsTaken(char[,] plan, (int x, int y) pos) => pos.x >= 0 && pos.y >= 0 && pos.x < plan.GetLength(0) &&
-                                                                         pos.y < plan.GetLength(1) && plan[pos.x, pos.y] == TakenSeat;
 
         private static readonly IEnumerable<(int x, int y)> Directions
             = new[]
@@ -74,12 +64,22 @@ namespace AdventOfCode2020
                 (-1, +1), (0, +1), (+ 1, + 1)
             };
 
+        private static bool IsValidPosition(char[,] plan, (int x, int y) pos)
+            => pos.x >= 0 && pos.y >= 0 && pos.x < plan.GetLength(0) && pos.y < plan.GetLength(1);
+
+        private static int AdjacentTaken(char[,] plan, (int x, int y) pos)
+            => AdjacentLocations(pos).Count(x => IsTaken(plan, x));
+
+        private static IEnumerable<(int x, int y)> AdjacentLocations((int x, int y) pos)
+            => Directions.Select(dir => (pos.x + dir.x, pos.y + dir.y));
+
+        private static bool IsTaken(char[,] plan, (int x, int y) pos) => IsValidPosition(plan, pos) && plan[pos.x, pos.y] == TakenSeat;
+
         private static int VisibleTaken(char[,] plan, (int x, int y) pos)
             => Directions.Count(dir => ScanTaken(plan, (pos.x + dir.x, pos.y + dir.y), dir));
 
         private static bool ScanTaken(char[,] plan, (int x, int y) pos, (int x, int y) direction)
-            => pos.x >= 0 && pos.y >= 0
-               && pos.x < plan.GetLength(0) && pos.y < plan.GetLength(1)
+            => IsValidPosition(plan, pos)
                && plan[pos.x, pos.y] != FreeSeat 
                && (plan[pos.x, pos.y] == TakenSeat || ScanTaken(plan, (pos.x + direction.x, pos.y + direction.y), direction));
 
