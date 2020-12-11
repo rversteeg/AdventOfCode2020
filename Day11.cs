@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using AdventOfCode2020.Util;
 
 namespace AdventOfCode2020
@@ -23,14 +24,15 @@ namespace AdventOfCode2020
             return Solve(input, VisibleSeats, 5);
         }
 
+        private readonly int _nrOfCores = Environment.ProcessorCount;
+
         private int Solve(char[,] input, Func<char[,], (int x, int y), IList<(int x, int y)>> seatSelector, int threshold)
         {
-            var seatPositions = Positions(input).Where(pos => input[pos.x, pos.y] != Floor).ToList();
-            var seatsToCheck = seatPositions.ToDictionary(x => x,
-                x => seatSelector(input, x));
+            var seatPositions = Positions(input).Where(pos => input[pos.x, pos.y] != Floor).ToList().AsParallel().WithDegreeOfParallelism(_nrOfCores);
+            var seatsToCheck = seatPositions.ToDictionary(x => x, x => seatSelector(input, x));
 
             //Swap all for first run
-            seatPositions.ForEach(pos=>input[pos.x,pos.y] = TakenSeat);
+            Parallel.ForEach(seatPositions, pos => input[pos.x, pos.y] = TakenSeat);
             
             while (true)
             {
@@ -41,7 +43,8 @@ namespace AdventOfCode2020
                 if (!swap.Any())
                     break;
 
-                swap.ForEach(pos => input[pos.x, pos.y] = input[pos.x, pos.y] == FreeSeat ? TakenSeat : FreeSeat);
+                Parallel.ForEach(swap,
+                    pos => input[pos.x, pos.y] = input[pos.x, pos.y] == FreeSeat ? TakenSeat : FreeSeat);
             }
 
             return seatPositions.Count(x => input[x.x, x.y] == TakenSeat);
