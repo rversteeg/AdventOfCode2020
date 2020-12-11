@@ -15,32 +15,28 @@ namespace AdventOfCode2020
 
         public override object SolvePart1(char[,] input)
         {
-            var seatPositions = Positions(input).Where(pos=>input[pos.x,pos.y] != Floor).ToArray();
-
-            while (true)
-            {
-                var swap = seatPositions.Where(pos =>
-                    input[pos.x, pos.y] == FreeSeat && AdjacentTaken(input, pos) == 0 ||
-                    input[pos.x, pos.y] == TakenSeat && AdjacentTaken(input, pos) >= 4).ToList();
-
-                if (!swap.Any())
-                    break;
-
-                swap.ForEach(pos => input[pos.x, pos.y] = input[pos.x, pos.y] == FreeSeat ? TakenSeat : FreeSeat);
-            }
-
-            return seatPositions.Count(x => input[x.x, x.y] == TakenSeat);
+            return Solve(input, AdjacentSeats, 4);
         }
 
         public override object SolvePart2(char[,] input)
         {
-            var seatPositions = Positions(input).Where(pos => input[pos.x, pos.y] != Floor).ToArray();
+            return Solve(input, VisibleSeats, 5);
+        }
 
+        private int Solve(char[,] input, Func<char[,], (int x, int y), IList<(int x, int y)>> seatSelector, int threshold)
+        {
+            var seatPositions = Positions(input).Where(pos => input[pos.x, pos.y] != Floor).ToList();
+            var seatsToCheck = seatPositions.ToDictionary(x => x,
+                x => seatSelector(input, x));
+
+            //Swap all for first run
+            seatPositions.ForEach(pos=>input[pos.x,pos.y] = TakenSeat);
+            
             while (true)
             {
                 var swap = seatPositions.Where(pos =>
-                    input[pos.x, pos.y] == FreeSeat && VisibleTaken(input, pos) == 0 ||
-                    input[pos.x, pos.y] == TakenSeat && VisibleTaken(input, pos) >= 5).ToList();
+                    input[pos.x, pos.y] == FreeSeat && seatsToCheck[pos].Count(seat => IsTakenNoCheck(input, seat)) == 0 ||
+                    input[pos.x, pos.y] == TakenSeat && seatsToCheck[pos].Count(seat => IsTakenNoCheck(input, seat)) >= threshold).ToList();
 
                 if (!swap.Any())
                     break;
@@ -66,22 +62,29 @@ namespace AdventOfCode2020
 
         private static bool IsValidPosition(char[,] plan, (int x, int y) pos)
             => pos.x >= 0 && pos.y >= 0 && pos.x < plan.GetLength(0) && pos.y < plan.GetLength(1);
+        
+        private static IList<(int x, int y)> AdjacentSeats(char[,] plan, (int x, int y) pos)
+            => AdjacentLocations(pos)
+                .Where(adjPos => IsValidPosition(plan, adjPos) && plan[adjPos.x, adjPos.y] != Floor).ToList();
 
-        private static int AdjacentTaken(char[,] plan, (int x, int y) pos)
-            => AdjacentLocations(pos).Count(x => IsTaken(plan, x));
+        private static IList<(int x, int y)> VisibleSeats(char[,] plan, (int x, int y) pos)
+            => Directions.Select(dir => ScanSeat(plan, (pos.x + dir.x, pos.y + dir.y), dir)).Where(x => x != null).Select(x=>x.Value).ToList();
 
         private static IEnumerable<(int x, int y)> AdjacentLocations((int x, int y) pos)
             => Directions.Select(dir => (pos.x + dir.x, pos.y + dir.y));
 
-        private static bool IsTaken(char[,] plan, (int x, int y) pos) => IsValidPosition(plan, pos) && plan[pos.x, pos.y] == TakenSeat;
+        private static bool IsTakenNoCheck(char[,] plan, (int x, int y) pos) => plan[pos.x, pos.y] == TakenSeat;
 
-        private static int VisibleTaken(char[,] plan, (int x, int y) pos)
-            => Directions.Count(dir => ScanTaken(plan, (pos.x + dir.x, pos.y + dir.y), dir));
+        private static (int x, int y)? ScanSeat(char[,] plan, (int x, int y) pos, (int x, int y) direction)
+        {
+            if (!IsValidPosition(plan,pos))
+                return null;
 
-        private static bool ScanTaken(char[,] plan, (int x, int y) pos, (int x, int y) direction)
-            => IsValidPosition(plan, pos)
-               && plan[pos.x, pos.y] != FreeSeat 
-               && (plan[pos.x, pos.y] == TakenSeat || ScanTaken(plan, (pos.x + direction.x, pos.y + direction.y), direction));
+            if (plan[pos.x, pos.y] != Floor)
+                return pos;
+
+            return ScanSeat(plan, (pos.x + direction.x, pos.y + direction.y), direction);
+        }
 
         protected override char[,] Parse()
         {
