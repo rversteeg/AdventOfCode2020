@@ -34,9 +34,6 @@ namespace AdventOfCode2020
 
             foreach (var bus in schedules)
             {
-                if (bus.busId < 0)
-                    continue;
-
                 while((timestamp+bus.idx) % bus.busId != 0)
                     timestamp += increment;
 
