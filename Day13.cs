@@ -29,7 +29,9 @@ namespace AdventOfCode2020
         {
             var schedules = input.Ids.Select((busId, idx)=> (busId: busId, idx)).Where(x => x.busId > 0).ToArray();
 
-            long timestamp = 100_000_000_000 - 100_000_000_000 % input.Ids[0];
+            var start = 100_000_000_000_000;
+
+            long timestamp = start - start % input.Ids[0];
             long increment = input.Ids[0];
 
             foreach (var bus in schedules.Skip(1))
