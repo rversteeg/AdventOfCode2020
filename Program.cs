@@ -54,8 +54,7 @@ Part2: {part2Answer} ( Took {part2Time} )
 
     public class Benchmark
     {
-        //[Params(1,2,3,4,5,6,7,8,9,10,11)]
-        [Params(11)]
+        [Params(1,2,3,4,5,6,7,8,9,10,11,12,13)]
         public int Day { get; set; }
 
         [Benchmark]

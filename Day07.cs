@@ -8,7 +8,7 @@ namespace AdventOfCode2020
 {
     public class Day07 : PuzzleSolutionWithParsedInput<Day07.Rule[]>
     {
-        private readonly Regex _ruleRegex = new Regex(@"^(?<color>[a-z ]+) bags contain ((?<requirementNumber>\d+) (?<requirementColor>[a-z ]+) bags?(, )?)+\.$", RegexOptions.Compiled);
+        private readonly Regex _ruleRegex = new(@"^(?<color>[a-z ]+) bags contain ((?<requirementNumber>\d+) (?<requirementColor>[a-z ]+) bags?(, )?)+\.$", RegexOptions.Compiled);
         
         public Day07() : base(7) { }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Numerics;
 using AdventOfCode2020.Util;
@@ -11,10 +12,10 @@ namespace AdventOfCode2020
 
         public record Boat(Vector2 position, Vector2 direction);
 
-        private static readonly Vector2 North = new Vector2(0, 1);
-        private static readonly Vector2 South = new Vector2(0, -1);
-        private static readonly Vector2 West = new Vector2(-1, 0);
-        private static readonly Vector2 East = new Vector2(1, 0);
+        private static readonly Vector2 North = new(0, 1);
+        private static readonly Vector2 South = new(0, -1);
+        private static readonly Vector2 West = new(-1, 0);
+        private static readonly Vector2 East = new(1, 0);
 
         public Day12() : base(12) {}
 
