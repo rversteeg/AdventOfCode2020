@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AdventOfCode2020.Util;
 
@@ -15,9 +14,8 @@ namespace AdventOfCode2020
         public override object SolvePart1(Input input)
         {
             var result =
-                
                 (from busId in input.Ids
-                 where busId > 0
+                    where busId > 0
                     let timeToWait = busId - input.CurTime % busId
                     orderby timeToWait
                     select busId * timeToWait).First();
@@ -27,9 +25,9 @@ namespace AdventOfCode2020
 
         public override object SolvePart2(Input input)
         {
-            var schedules = input.Ids.Select((busId, idx)=> (busId: busId, idx)).Where(x => x.busId > 0).ToArray();
+            var schedules = input.Ids.Select((busId, idx)=> (busId, idx)).Where(x => x.busId > 0).ToArray();
 
-            var start = 100_000_000_000_000;
+            const long start = 100_000_000_000_000;
 
             long timestamp = start - start % input.Ids[0];
             long increment = input.Ids[0];
@@ -43,11 +41,6 @@ namespace AdventOfCode2020
             }
 
             return timestamp;
-        }
-
-        private void WriteSchedule(in long time, (int busId, int idx)[] schedule)
-        {
-            Console.WriteLine($"{time}: {String.Join(", ", schedule.Select(x=>x.busId.ToString()))}");
         }
 
         protected override Input Parse()
