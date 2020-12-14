@@ -47,7 +47,7 @@ namespace AdventOfCode2020
         private static IEnumerable<long> GetAddresses(long address, string mask, int index = 0)
             => index >= mask.Length
                 ? new[] { address }
-                : mask[index] switch
+                : mask[mask.Length - index - 1] switch
                 {
                     '0' => GetAddresses(address, mask, index + 1),
                     '1' => GetAddresses(SetBit(address, index), mask, index + 1),
@@ -56,10 +56,10 @@ namespace AdventOfCode2020
                 };
 
         private static long SwapBit(long address, int bitNum)
-            => address ^ (1L << (35 - bitNum));
+            => address ^ (1L << bitNum);
 
         private static long SetBit(long address, int bitNum)
-            => address | (1L << (35 - bitNum));
+            => address | (1L << bitNum);
 
         public record Command(string Name);
         public record SetMaskCommand(string Mask) : Command("mask");
