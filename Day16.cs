@@ -14,9 +14,7 @@ namespace AdventOfCode2020
 
         public record Rule(int MinValue, int MaxValue);
 
-        public Day16() : base(16)
-        {
-        }
+        public Day16() : base(16){}
 
         public override object SolvePart1(Input input)
         {
@@ -51,9 +49,11 @@ namespace AdventOfCode2020
                 matchedFields.ForEach(x => matches[x.Key.Name] = x.First().index);
             }
 
-            var departureFields = input.Fields.Where(x => x.Name.StartsWith("departure")).ToList();
-            var myDepartureValues = departureFields.Select(field => input.MyTicket[matches[field.Name]]).ToList();
-            return myDepartureValues.Aggregate(1L, (val, field) => val * field);
+            var myValues = 
+                from field in input.Fields.Where(x => x.Name.StartsWith("departure"))
+                select input.MyTicket[matches[field.Name]];
+
+            return myValues.Aggregate(1L, (val, field) => val * field);
         }
 
         protected override Input Parse()
