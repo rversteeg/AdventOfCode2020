@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using AdventOfCode2020.Util;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AdventOfCode2020
 {
@@ -12,39 +10,41 @@ namespace AdventOfCode2020
         public Day17() : base(17) { }
 
         public override object SolvePart1(HashSet<(int x, int y, int z)> input)
-        {
-            var result = Turn(input, 6);
+        {            
+            return Turn(input, Directions3D, Add3D, 6).Count();
+        }
 
-            return result.Count();
-        }        
+        private static (int x, int y, int z) Add3D((int x, int y, int z) left, (int x, int y, int z) right)
+            => (left.x + right.x, left.y + right.y, left.z + right.z);
 
-        private IList<(int x, int y, int z)> Directions = (from x in Enumerable.Range(-1, 3)
+        private IList<(int x, int y, int z)> Directions3D = (from x in Enumerable.Range(-1, 3)
                                                                 from y in Enumerable.Range(-1, 3)
                                                                 from z in Enumerable.Range(-1, 3)
                                                                 where x != 0 || y != 0 || z != 0
-                                                                select (x,y,z)).ToList();
+                                                                select (x,y,z)).ToList();       
 
-        private HashSet<(int x, int y, int z)> Turn(HashSet<(int x, int y, int z)> input, int nrOfTurns)
+        private HashSet<TVector> Turn<TVector>(HashSet<TVector> input, IList<TVector> directions, Func<TVector, TVector, TVector> add, int nrOfTurns)
         {
             if (nrOfTurns == 0)
                 return input;
 
-            var adjecencyMap = input.SelectMany(item => Directions.Select(direction => (item.x + direction.x, item.y + direction.y, item.z + direction.z))).GroupBy(x => x);
+            var adjecencyMap = input.SelectMany(item => directions.Select(direction => add(item, direction))).GroupBy(x => x);
 
             var result = (from item in adjecencyMap
                          let count = item.Count()
                          where count == 3 || input.Contains(item.Key) && count == 2
                          select item.Key).ToHashSet();
 
-            return Turn(result, nrOfTurns - 1);
+            return Turn(result, directions, add, nrOfTurns - 1);
         }        
 
         public override object SolvePart2(HashSet<(int x, int y, int z)> input)
         {
-            var input4D = input.Select(item => (item.x, item.y, item.z, 0)).ToHashSet();
-            var result = Turn(input4D, 6);
-            return result.Count();
+            return Turn(input.Select(item => (item.x, item.y, item.z, 0)).ToHashSet(), Directions4D, Add4D, 6).Count();
         }
+
+        private static (int x, int y, int z, int w) Add4D((int x, int y, int z, int w) left, (int x, int y, int z, int w) right)
+            => (left.x + right.x, left.y + right.y, left.z + right.z, left.w + right.w);
 
         private IList<(int x, int y, int z, int w)> Directions4D = (from x in Enumerable.Range(-1, 3)
                                                                     from y in Enumerable.Range(-1, 3)
@@ -52,22 +52,6 @@ namespace AdventOfCode2020
                                                                     from w in Enumerable.Range(-1, 3)
                                                                     where x != 0 || y != 0 || z != 0 || w != 0
                                                                     select (x, y, z, w)).ToList();
-
-
-        private HashSet<(int x, int y, int z, int w)> Turn(HashSet<(int x, int y, int z, int w)> input, int nrOfTurns)
-        {
-            if (nrOfTurns == 0)
-                return input;
-
-            var adjecencyMap = input.SelectMany(item => Directions4D.Select(direction => (item.x + direction.x, item.y + direction.y, item.z + direction.z, item.w + direction.w))).GroupBy(x => x);
-
-            var result = (from item in adjecencyMap
-                          let count = item.Count()
-                          where count == 3 || input.Contains(item.Key) && count == 2
-                          select item.Key).ToHashSet();
-
-            return Turn(result, nrOfTurns - 1);
-        }
 
         protected override HashSet<(int x, int y, int z)> Parse()
             => ReadInput().ToHashSet();
