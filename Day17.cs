@@ -28,9 +28,9 @@ namespace AdventOfCode2020
             if (nrOfTurns == 0)
                 return input;
 
-            var adjecencyMap = input.SelectMany(item => directions.Select(direction => add(item, direction))).GroupBy(x => x);
+            var adjacencyMap = input.SelectMany(item => directions.Select(direction => add(item, direction))).GroupBy(x => x);
 
-            var result = (from item in adjecencyMap
+            var result = (from item in adjacencyMap
                          let count = item.Count()
                          where count == 3 || input.Contains(item.Key) && count == 2
                          select item.Key).ToHashSet();
@@ -64,7 +64,7 @@ namespace AdventOfCode2020
                 for(int x = 0; x < lines[0].Length; x++)
                 {
                     if (lines[y][x] == '#')
-                        yield return new(x, y, 0);
+                        yield return (x, y, 0);
                 }
             }
         }
