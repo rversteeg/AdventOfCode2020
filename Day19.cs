@@ -15,37 +15,32 @@ namespace AdventOfCode2020
             IEnumerable<StringSegment> Match(StringSegment input, Dictionary<int, IRule> rules);
         }
 
-        public record Input(Dictionary<int, Day19.IRule> Rules, string[] Messages);
+        public record Input(Dictionary<int, IRule> Rules, string[] Messages);
 
         public record LeafRule(char Required) : IRule
         {
-            public IEnumerable<StringSegment> Match(StringSegment input, Dictionary<int, IRule> rules)
-            {
-                return input.Length > 0 && input[0] == Required ? new[] {input.Subsegment(1)} : Enumerable.Empty<StringSegment>();
-            }
+            public IEnumerable<StringSegment> Match(StringSegment input, Dictionary<int, IRule> rules) 
+                => input.Length > 0 && input[0] == Required ? new[] {input.Subsegment(1)} : Enumerable.Empty<StringSegment>();
         }
 
         public record SingleRule(List<int> RuleList) : IRule
         {
             public IEnumerable<StringSegment> Match(StringSegment input, Dictionary<int, IRule> rules)
-            {
-                return RuleList.Aggregate((IEnumerable<StringSegment>)new[] {input},
+                => RuleList.Aggregate(
+                    (IEnumerable<StringSegment>)new[] {input},
                     (options, rule) => options.SelectMany(option => rules[rule].Match(option, rules)));
-            }
         }
 
         public record MultiRule(List<SingleRule> RuleLists) : IRule
         {
             public IEnumerable<StringSegment> Match(StringSegment input, Dictionary<int, IRule> rules)
-            {
-                return RuleLists.SelectMany(x => x.Match(input, rules));
-            }
+                => RuleLists.SelectMany(x => x.Match(input, rules));
         }
 
         public override object SolvePart1(Input input)
         {
             var ruleZero = input.Rules[0];
-            return input.Messages.Count(x => ruleZero.Match(x, input.Rules).Any(x=>x.Length == 0));
+            return input.Messages.Count(message => ruleZero.Match(message, input.Rules).Any(match=>match.Length == 0));
         }
 
         public override object SolvePart2(Input input)
@@ -55,7 +50,7 @@ namespace AdventOfCode2020
             input.Rules[8] = ParseMultiRule("42 | 42 8");
             input.Rules[11] = ParseMultiRule("42 31 | 42 11 31");
 
-            return input.Messages.Count(x => ruleZero.Match(x, input.Rules).Any(x => x.Length == 0));
+            return input.Messages.Count(message => ruleZero.Match(message, input.Rules).Any(match => match.Length == 0));
         }
 
         protected override Input Parse()
