@@ -109,17 +109,16 @@ namespace AdventOfCode2020
                         }
                         break;
                     default:
-                        throw new Exception("Wrong token");
+                        throw new ArgumentException("Wrong expression", nameof(tokens));
                 }
             }
             while (stack.Any())
             {
                 var tok = stack.Pop();
                 if (tok.Type == TokenType.Parenthesis)
-                    throw new Exception("Mismatched parentheses");
+                    throw new ArgumentException("Wrong expression", nameof(tokens));
                 yield return tok;
             }
         }
-
     }
 }
