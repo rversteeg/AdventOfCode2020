@@ -13,10 +13,8 @@ namespace AdventOfCode2020
 
         public override object SolvePart1(Input[] input)
         {
-            var foundAllergen = FindIngredientsWithAllergens(input);
-            var ingredientsWithAllergen = foundAllergen.Select(x => x.Value).ToHashSet();
-            return input.SelectMany(x => x.Ingredients)
-                .Count(ingredient => !ingredientsWithAllergen.Contains(ingredient));
+            var ingredientsWithAllergen = FindIngredientsWithAllergens(input).Select(x => x.Value).ToHashSet();
+            return input.SelectMany(x => x.Ingredients).Count(ingredient => !ingredientsWithAllergen.Contains(ingredient));
         }
 
         private Dictionary<string, string> FindIngredientsWithAllergens(Input[] input)
@@ -38,14 +36,13 @@ namespace AdventOfCode2020
                           && allergenOptions.Item2.Count == 1
                     select allergenOptions;
 
-                foreach (var newMatch in newMatches)
+                foreach (var (allergen, ingredients) in newMatches)
                 {
-                    var ingredient = newMatch.Item2.First();
                     foreach (var option in options)
                     {
-                        option.Item2.Remove(ingredient);
+                        option.Item2.Remove(ingredients.First());
                     }
-                    foundAllergen.Add(newMatch.Key, ingredient);
+                    foundAllergen.Add(allergen, ingredients.First());
                 }
             }
 
