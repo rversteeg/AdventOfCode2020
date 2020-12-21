@@ -1,8 +1,8 @@
-﻿namespace AdventOfCode2020.Util
+﻿namespace AdventOfCode.Util
 {
     public abstract class PuzzleSolutionWithParsedInput<TInput> : PuzzleSolutionBase
     {
-        protected PuzzleSolutionWithParsedInput(int day) : base(day) {}
+        protected PuzzleSolutionWithParsedInput(int day, int year) : base(day, year) {}
 
         public abstract object SolvePart1(TInput input);
         public abstract object SolvePart2(TInput input);
@@ -18,7 +18,5 @@
         {
             return SolvePart2(Parse());
         }
-
-        private TInput Input => Parse();
     }
 }

@@ -1,14 +1,16 @@
 ﻿using System.IO;
 
-namespace AdventOfCode2020.Util
+namespace AdventOfCode.Util
 {
     public abstract class PuzzleSolutionBase : IPuzzleSolution
     {
         public int Day { get; }
+        public int Year { get; }
 
-        protected PuzzleSolutionBase(int day)
+        protected PuzzleSolutionBase(int day, int year)
         {
             Day = day;
+            Year = year;
         }
 
         public virtual object SolvePart1()
@@ -20,15 +22,14 @@ namespace AdventOfCode2020.Util
         {
             return null;
         }
+        private string InputFileName => $@"Input\{Year}\Day{Day:D2}.txt";
 
-        public string InputFileName => $@"Input\Day{Day:D2}.txt";
-
-        public string ReadAllInputText()
+        protected string ReadAllInputText()
         {
             return File.ReadAllText(InputFileName);
         }
 
-        public string[] ReadAllInputLines()
+        protected string[] ReadAllInputLines()
         {
             return File.ReadAllLines(InputFileName);
         }

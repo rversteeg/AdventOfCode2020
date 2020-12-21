@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using AdventOfCode2020.Util;
+using AdventOfCode.Util;
 
-namespace AdventOfCode2020
+namespace AdventOfCode.Y2020
 {
     public class Day21 : PuzzleSolutionWithParsedInput<Day21.Input[]>
     {
         public record Input(string[] Ingredients, string[] Allergens);
 
-        public Day21() : base(21){}
+        public Day21() : base(21, 2020){}
 
         public override object SolvePart1(Input[] input)
         {
@@ -38,7 +38,7 @@ namespace AdventOfCode2020
 
                 foreach (var (allergen, ingredients) in newMatches)
                 {
-                    foreach (var option in options)
+                    foreach (var option in options.Where(x=>x.Key != allergen))
                     {
                         option.Item2.Remove(ingredients.First());
                     }
