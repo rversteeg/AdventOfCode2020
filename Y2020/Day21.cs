@@ -13,8 +13,9 @@ namespace AdventOfCode.Y2020
 
         public override object SolvePart1(Input[] input)
         {
-            var ingredientsWithAllergen = FindIngredientsWithAllergens(input).Select(x => x.Value).ToHashSet();
-            return input.SelectMany(x => x.Ingredients).Count(ingredient => !ingredientsWithAllergen.Contains(ingredient));
+            return input.SelectMany(x => x.Ingredients)
+                .AllExcept(FindIngredientsWithAllergens(input).Select(x => x.Value))
+                .Count();
         }
 
         private Dictionary<string, string> FindIngredientsWithAllergens(Input[] input)
