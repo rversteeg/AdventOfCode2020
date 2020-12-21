@@ -38,11 +38,12 @@ namespace AdventOfCode.Y2020
 
                 foreach (var (allergen, ingredients) in newMatches)
                 {
-                    foreach (var option in options.Where(x=>x.Key != allergen))
+                    var ingredient = ingredients.First();
+                    foreach (var option in options)
                     {
-                        option.Item2.Remove(ingredients.First());
+                        option.Item2.Remove(ingredient);
                     }
-                    foundAllergen.Add(allergen, ingredients.First());
+                    foundAllergen.Add(allergen, ingredient);
                 }
             }
 
