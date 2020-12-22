@@ -46,14 +46,15 @@ namespace AdventOfCode.Y2020
             var deck1 = new Queue<int>(player1);
             var deck2 = new Queue<int>(player2);
             
-            var turns = new HashSet<string>();
+            var turns = new HashSet<IList<int>>(new SequenceComparer());
 
             while (deck1.Count > 0 && deck2.Count > 0)
             {
-                var strHands = String.Join(",", deck1) + ";" + String.Join(",", deck2);
-                if (turns.Contains(strHands))
+                var handToCheck = (deck1.Count < deck2.Count ? deck1 : deck2).ToList();
+                //var handToCheck = deck1.Append(-1).Concat(deck2).ToList();
+                if (turns.Contains(handToCheck))
                     return (1, 0);
-                turns.Add(strHands);
+                turns.Add(handToCheck);
                 
                 var c1 = deck1.Dequeue();
                 var c2 = deck2.Dequeue();
@@ -89,6 +90,39 @@ namespace AdventOfCode.Y2020
             var parts = ReadAllInputText().Split($"{Environment.NewLine}{Environment.NewLine}");
             return new Input(parts[0].Split($"{Environment.NewLine}").Skip(1).Select(Int32.Parse).ToArray(),
                 parts[1].Split($"{Environment.NewLine}").Skip(1).Select(Int32.Parse).ToArray());
+        }
+    }
+
+    internal class SequenceComparer : IEqualityComparer<IList<int>>
+    {
+        public bool Equals(IList<int> x, IList<int> y)
+        {
+            if (x == null && y == null)
+                return true;
+            if (x == null || y == null)
+                return false;
+
+            if (x.Count != y.Count)
+                return false;
+
+            for (int i = 0; i < x.Count; i++)
+            {
+                if (x[i] != y[i])
+                    return false;
+            }
+
+            return true;
+        }
+
+        public int GetHashCode(IList<int> input)
+        {
+            var hashCode = new HashCode();
+            foreach (var item in input)
+            {
+                hashCode.Add(item);
+            }
+
+            return hashCode.ToHashCode();
         }
     }
 }
