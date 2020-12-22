@@ -40,17 +40,29 @@ namespace AdventOfCode.Y2020
             var result = Round(input.Player1, input.Player2);
             return Math.Max(result.Item1, result.Item2);
         }
+        
+        private static int GetHashCode(IEnumerable<int> input)
+        {
+            var hashCode = new HashCode();
+            foreach (var item in input)
+            {
+                hashCode.Add(item);
+            }
+
+            return hashCode.ToHashCode();
+        }
 
         private static (int,int) Round(IEnumerable<int> player1, IEnumerable<int> player2)
         {
             var deck1 = new Queue<int>(player1);
             var deck2 = new Queue<int>(player2);
             
-            var turns = new HashSet<string>();
+            var turns = new HashSet<int>();
 
             while (deck1.Count > 0 && deck2.Count > 0)
             {
-                var strHands = String.Join(",", (deck1.Count < deck2.Count ? deck1 : deck2));
+                //Could potentially fail, due to collisions, should actually use an comparer
+                var strHands = GetHashCode((deck1.Count < deck2.Count ? deck1 : deck2));
                 if (turns.Contains(strHands))
                     return (1, 0);
                 turns.Add(strHands);
