@@ -46,15 +46,14 @@ namespace AdventOfCode.Y2020
             var deck1 = new Queue<int>(player1);
             var deck2 = new Queue<int>(player2);
             
-            var turns = new HashSet<IList<int>>(new SequenceComparer());
+            var turns = new HashSet<string>();
 
             while (deck1.Count > 0 && deck2.Count > 0)
             {
-                var handToCheck = (deck1.Count < deck2.Count ? deck1 : deck2).ToList();
-                //var handToCheck = deck1.Append(-1).Concat(deck2).ToList();
-                if (turns.Contains(handToCheck))
+                var strHands = String.Join(",", (deck1.Count < deck2.Count ? deck1 : deck2));
+                if (turns.Contains(strHands))
                     return (1, 0);
-                turns.Add(handToCheck);
+                turns.Add(strHands);
                 
                 var c1 = deck1.Dequeue();
                 var c2 = deck2.Dequeue();
