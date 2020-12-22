@@ -4,34 +4,51 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using BenchmarkDotNet.Attributes;
+using BenchmarkDotNet.Running;
 
 namespace AdventOfCode
 {
-    class Program
+    internal static class Program
     {
-        static void Main(string[] args)
+        private static void Main()
         {
-#if DEBUG
-            var allDays = GetSolutions(2020).OrderByDescending(x => x.Day);
-
-            foreach (var day in allDays)
+            if (RunBenchmark)
             {
-                Stopwatch sw = new Stopwatch();
-                sw.Start();
-                var part1Answer = day.SolvePart1();
-                var part1Time = sw.Elapsed;
-                sw.Restart();
-                var part2Answer = day.SolvePart2();
-                var part2Time = sw.Elapsed;
-                sw.Stop();
-                Console.WriteLine($@"-- Day {day.Day:D2}
+                BenchmarkRunner.Run(Assembly.GetExecutingAssembly());
+            }
+            else
+            {
+                var allDays = GetSolutions(2020).OrderByDescending(x => x.Day);
+
+                foreach (var day in allDays)
+                {
+                    Stopwatch sw = new Stopwatch();
+                    sw.Start();
+                    var part1Answer = day.SolvePart1();
+                    var part1Time = sw.Elapsed;
+                    sw.Restart();
+                    var part2Answer = day.SolvePart2();
+                    var part2Time = sw.Elapsed;
+                    sw.Stop();
+                    Console.WriteLine($@"-- Day {day.Day:D2}
 Part1: {part1Answer} ( Took {part1Time} )
 Part2: {part2Answer} ( Took {part2Time} )
 ");
+                }
             }
+        }
+
+        private static bool RunBenchmark
+        {
+            get
+            {
+#if DEBUG
+                return false;
 #else
-            BenchmarkRunner.Run(Assembly.GetExecutingAssembly());
+                return true;
 #endif
+
+            }
         }
 
         private static IEnumerable<IPuzzleSolution> GetSolutions(int year)
@@ -49,7 +66,7 @@ Part2: {part2Answer} ( Took {part2Time} )
 
     public class Benchmark
     {
-        [Params(20)]
+        [Params(22)]
         public int Day { get; set; }
 
         [Benchmark]
