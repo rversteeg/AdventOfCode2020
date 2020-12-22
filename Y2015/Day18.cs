@@ -38,22 +38,7 @@ namespace AdventOfCode.Y2015
 
             return count;
         }
-
-        private void PrintGrid(bool[,] input)
-        {
-            for (int y = 0; y < input.GetLength(1); y++)
-            {
-                for (int x = 0; x < input.GetLength(0); x++)
-                {
-                    Console.Write(input[x, y] ? '#' : '.');
-                }
-
-                Console.WriteLine();
-            }
-            
-            Console.WriteLine("");
-        }
-
+        
         private bool IsSet(bool[,] input, (int x, int y) position)
         {
             if (position.x < 0 ||
