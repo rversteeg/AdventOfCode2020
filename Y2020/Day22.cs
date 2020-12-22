@@ -46,15 +46,14 @@ namespace AdventOfCode.Y2020
             var deck1 = new Queue<int>(player1);
             var deck2 = new Queue<int>(player2);
             
-            var turns = new HashSet<(string, string)>();
+            var turns = new HashSet<string>();
 
             while (deck1.Count > 0 && deck2.Count > 0)
             {
-                var strDeck1 = String.Join(",", deck1);
-                var strDeck2 = String.Join(",", deck2);
-                if (turns.Contains((strDeck1, strDeck2)))
+                var strHands = String.Join(",", deck1) + ";" + String.Join(",", deck2);
+                if (turns.Contains(strHands))
                     return (1, 0);
-                turns.Add((strDeck1, strDeck2));
+                turns.Add(strHands);
                 
                 var c1 = deck1.Dequeue();
                 var c2 = deck2.Dequeue();
