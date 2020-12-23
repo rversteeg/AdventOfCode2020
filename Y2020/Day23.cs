@@ -42,7 +42,7 @@ namespace AdventOfCode.Y2020
             for (int i = 0; i < iterations; i++)
             {
                 var firstCup = curCup.Next;
-                var middleCup = curCup.Next;
+                var middleCup = firstCup.Next;
                 var lastCup = middleCup.Next;
                 var destVal = FindDestVal(curCup.Value, maxValue, firstCup.Value, middleCup.Value, lastCup.Value );
                 var destCup = lookup[destVal];
