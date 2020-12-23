@@ -30,16 +30,22 @@ namespace AdventOfCode.Y2020
         public override object SolvePart1(int[] input)
         {
             var lookup = BuildCupList(input);
-            var curCup = lookup[input[0]];
+            Run(lookup, input[0], input.Max(), 100);
+            return string.Join("", lookup[1].Next.Take(8).Select(x => x.Value.ToString()));
+        }
+
+        private void Run(Dictionary<int, Cup> lookup, int firstValue, int maxValue, int iterations)
+        {
+            var curCup = lookup[firstValue];
             
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < iterations; i++)
             {
                 var cupsToRemove = curCup.Next.Take(3).ToList();
                 
                 //Remove
                 curCup.Next = cupsToRemove[2].Next;
                 
-                var destVal = FindDestVal(curCup.Value, 9, cupsToRemove.Select(x => x.Value).ToList());
+                var destVal = FindDestVal(curCup.Value, maxValue, cupsToRemove.Select(x => x.Value).ToList());
                 var destCup = lookup[destVal];
 
                 //Insert
@@ -48,8 +54,6 @@ namespace AdventOfCode.Y2020
 
                 curCup = curCup.Next;
             }
-
-            return string.Join("", lookup[1].Next.Take(8).Select(x => x.Value.ToString()));
         }
 
         private static Dictionary<int, Cup> BuildCupList(IReadOnlyList<int> input)
@@ -87,25 +91,7 @@ namespace AdventOfCode.Y2020
         {
             const int numItems = 1_000_000;
             var lookup = BuildCupList(input.Concat(Enumerable.Range(input.Max() + 1, numItems - input.Length)).ToList());
-            var curCup = lookup[input[0]];
-            
-            for (int i = 0; i < 10_000_000; i++)
-            {
-                var cupsToRemove = curCup.Next.Take(3).ToList();
-                
-                //Remove
-                curCup.Next = cupsToRemove[2].Next;
-                
-                var destVal = FindDestVal(curCup.Value, numItems, cupsToRemove.Select(x => x.Value).ToList());
-                var destCup = lookup[destVal];
-
-                //Insert
-                cupsToRemove[2].Next = destCup.Next;
-                destCup.Next = cupsToRemove[0];
-
-                curCup = curCup.Next;
-            }
-            
+            Run(lookup, input[0], numItems, 10_000_000);
             return 1L * lookup[1].Next.Value * lookup[1].Next.Next.Value;
         }
 
