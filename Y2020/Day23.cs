@@ -41,15 +41,17 @@ namespace AdventOfCode.Y2020
             
             for (int i = 0; i < iterations; i++)
             {
-                var cupsToRemove = new[] {curCup.Next, curCup.Next.Next, curCup.Next.Next.Next};
-                var destVal = FindDestVal(curCup.Value, maxValue, new []{ cupsToRemove[0].Value, cupsToRemove[1].Value, cupsToRemove[2].Value });
+                var firstCup = curCup.Next;
+                var middleCup = curCup.Next;
+                var lastCup = middleCup.Next;
+                var destVal = FindDestVal(curCup.Value, maxValue, firstCup.Value, middleCup.Value, lastCup.Value );
                 var destCup = lookup[destVal];
                 
                 //Remove
-                curCup.Next = cupsToRemove[2].Next;
+                curCup.Next = lastCup.Next;
                 //Insert
-                cupsToRemove[2].Next = destCup.Next;
-                destCup.Next = cupsToRemove[0];
+                lastCup.Next = destCup.Next;
+                destCup.Next = firstCup;
 
                 curCup = curCup.Next;
             }
@@ -76,12 +78,12 @@ namespace AdventOfCode.Y2020
             return lookup;
         }
 
-        private static int FindDestVal(int curValue, int maxVal, int[] exclude)
+        private static int FindDestVal(int curValue, int maxVal, int exclude1, int exclude2, int exclude3)
         {
             while(true)
             {
                 curValue = curValue == 1 ? maxVal : curValue - 1;
-                if (Array.IndexOf(exclude, curValue) < 0)
+                if (exclude1 != curValue && exclude2 != curValue && exclude3 != curValue)
                     return curValue;
             }
         }
