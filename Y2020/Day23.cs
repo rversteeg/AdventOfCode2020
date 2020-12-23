@@ -35,7 +35,7 @@ namespace AdventOfCode.Y2020
             return string.Join("", lookup[1].Next.Enumerate().Take(8).Select(x => x.Value.ToString()));
         }
 
-        private void Run(Dictionary<int, Cup> lookup, int firstValue, int maxValue, int iterations)
+        private void Run(Cup[] lookup, int firstValue, int maxValue, int iterations)
         {
             var curCup = lookup[firstValue];
             
@@ -57,12 +57,10 @@ namespace AdventOfCode.Y2020
             }
         }
 
-        private static Dictionary<int, Cup> BuildCupList(IReadOnlyList<int> input)
+        private static Cup[] BuildCupList(IReadOnlyList<int> input, bool extendToMillion = false)
         {
-            if (input.Count == 0)
-                return new Dictionary<int, Cup>();
-            
-            Dictionary<int, Cup> lookup = new();
+            //Index 0 is not used
+            var lookup = new Cup[extendToMillion ? 1_000_001 : input.Count + 1];
             Cup prev = null;
 
             foreach (var number in input)
@@ -72,6 +70,17 @@ namespace AdventOfCode.Y2020
                     prev.Next = cup;
                 prev = cup;
                 lookup[number] = cup;
+            }
+
+            if (extendToMillion)
+            {
+                for (int i = 10; i <= 1_000_000; i++)
+                {
+                    var cup = new Cup() {Value = i};
+                    prev.Next = cup;
+                    prev = cup;
+                    lookup[i] = cup;
+                }
             }
 
             prev!.Next = lookup[input[0]];
@@ -91,7 +100,7 @@ namespace AdventOfCode.Y2020
         public override object SolvePart2(int[] input)
         {
             const int numItems = 1_000_000;
-            var lookup = BuildCupList(input.Concat(Enumerable.Range(input.Max() + 1, numItems - input.Length)).ToList());
+            var lookup = BuildCupList(input, true);
             Run(lookup, input[0], numItems, 10_000_000);
             return 1L * lookup[1].Next.Value * lookup[1].Next.Next.Value;
         }
