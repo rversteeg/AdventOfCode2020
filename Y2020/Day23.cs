@@ -10,21 +10,10 @@ namespace AdventOfCode.Y2020
     {
         public Day23() : base(23, 2020) { }
 
-        [DebuggerDisplay("{Value} ( Next = {Next.Value} )")]
-        public class Cup
+        private struct Cup
         {
             public int Value;
-            public Cup Next;
-
-            public IEnumerable<Cup> Enumerate()
-            {
-                var cur = this;
-                while (true)
-                {
-                    yield return cur;
-                    cur = cur.Next;
-                }
-            }
+            public int NextValue;
         }
 
         public override object SolvePart1(int[] input)
@@ -32,28 +21,38 @@ namespace AdventOfCode.Y2020
             var lookup = BuildCupList(input);
             Run(lookup, input[0], input.Max(), 100);
             
-            return string.Join("", lookup[1].Next.Enumerate().Take(8).Select(x => x.Value.ToString()));
+            return string.Join("", Enumerate(lookup, lookup[1].NextValue).Take(8).Select(x => x.ToString()));
+        }
+
+        private static IEnumerable<int> Enumerate(Cup[] lookup, int firstValue)
+        {
+            Cup cur = lookup[firstValue];
+            while (true)
+            {
+                yield return cur.Value;
+                cur = lookup[cur.NextValue];
+            }
         }
 
         private void Run(Cup[] lookup, int firstValue, int maxValue, int iterations)
         {
-            var curCup = lookup[firstValue];
+            var curValue = firstValue;
             
             for (int i = 0; i < iterations; i++)
             {
-                var firstCup = curCup.Next;
-                var middleCup = firstCup.Next;
-                var lastCup = middleCup.Next;
-                var destVal = FindDestVal(curCup.Value, maxValue, firstCup.Value, middleCup.Value, lastCup.Value );
-                var destCup = lookup[destVal];
+                var valuesToRemove = (lookup[curValue].NextValue,
+                    lookup[lookup[curValue].NextValue].NextValue, 
+                    lookup[lookup[lookup[curValue].NextValue].NextValue].NextValue);
                 
-                //Remove
-                curCup.Next = lastCup.Next;
-                //Insert
-                lastCup.Next = destCup.Next;
-                destCup.Next = firstCup;
+                var destVal = FindDestVal(curValue, maxValue, valuesToRemove);
 
-                curCup = curCup.Next;
+                //Remove
+                lookup[curValue].NextValue = lookup[valuesToRemove.Item3].NextValue;
+                //Insert
+                lookup[valuesToRemove.Item3].NextValue = lookup[destVal].NextValue;
+                lookup[destVal].NextValue = valuesToRemove.Item1;
+
+                curValue = lookup[curValue].NextValue;
             }
         }
 
@@ -61,38 +60,36 @@ namespace AdventOfCode.Y2020
         {
             //Index 0 is not used
             var lookup = new Cup[extendToMillion ? 1_000_001 : input.Count + 1];
-            Cup prev = null;
+            var prevNumber = -1;
 
             foreach (var number in input)
             {
-                var cup = new Cup() {Value = number};
-                if (prev != null)
-                    prev.Next = cup;
-                prev = cup;
-                lookup[number] = cup;
+                lookup[number] = new Cup() {Value = number};
+                if (prevNumber != -1)
+                    lookup[prevNumber].NextValue = number;
+                prevNumber = number;
             }
 
             if (extendToMillion)
             {
-                for (int i = 10; i <= 1_000_000; i++)
+                for (int i = input.Max()+1; i <= 1_000_000; i++)
                 {
-                    var cup = new Cup() {Value = i};
-                    prev.Next = cup;
-                    prev = cup;
-                    lookup[i] = cup;
+                    lookup[i] = new Cup() {Value = i};
+                    lookup[prevNumber].NextValue = i;
+                    prevNumber = i;
                 }
             }
 
-            prev!.Next = lookup[input[0]];
+            lookup[prevNumber].NextValue = lookup[input[0]].Value;
             return lookup;
         }
 
-        private static int FindDestVal(int curValue, int maxVal, int exclude1, int exclude2, int exclude3)
+        private static int FindDestVal(int curValue, int maxVal, (int, int, int) exclude)
         {
             while(true)
             {
                 curValue = curValue == 1 ? maxVal : curValue - 1;
-                if (exclude1 != curValue && exclude2 != curValue && exclude3 != curValue)
+                if (exclude.Item1 != curValue && exclude.Item2 != curValue && exclude.Item3 != curValue)
                     return curValue;
             }
         }
@@ -102,7 +99,7 @@ namespace AdventOfCode.Y2020
             const int numItems = 1_000_000;
             var lookup = BuildCupList(input, true);
             Run(lookup, input[0], numItems, 10_000_000);
-            return 1L * lookup[1].Next.Value * lookup[1].Next.Next.Value;
+            return 1L * lookup[1].NextValue * lookup[lookup[1].NextValue].NextValue;
         }
 
         protected override int[] Parse()
