@@ -75,14 +75,12 @@ namespace AdventOfCode.Y2020
 
         private static int FindDestVal(int curValue, int maxVal, IList<int> exclude)
         {
-            for (int i = 0; i < 9; i++)
+            while(true)
             {
                 curValue = curValue == 1 ? maxVal : curValue - 1;
                 if (!exclude.Contains(curValue))
                     return curValue;
             }
-
-            throw new ArgumentException("No possible options");
         }
 
         public override object SolvePart2(int[] input)
