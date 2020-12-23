@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Collections.Generic;
 using System.Linq;
 using AdventOfCode.Util;
 
@@ -34,23 +32,31 @@ namespace AdventOfCode.Y2020
             }
         }
 
-        private void Run(Cup[] lookup, int firstValue, int maxValue, int iterations)
+        private static int Mod(int val, int mod)
+        {
+            var result = val % mod;
+            return result < 0 ? result + mod : result;
+        }
+
+        private void Run(Cup[] cups, int firstValue, int maxValue, int iterations)
         {
             var curValue = firstValue;
             
             for (int i = 0; i < iterations; i++)
             {
-                var valuesToRemove = (lookup[curValue].NextValue,
-                    lookup[lookup[curValue].NextValue].NextValue, 
-                    lookup[lookup[lookup[curValue].NextValue].NextValue].NextValue);
-                
-                var destVal = FindDestVal(curValue, maxValue, valuesToRemove);
+                var i1 = lookup[curValue].NextValue;
+                var i2 = lookup[i1].NextValue;
+                var i3 = lookup[i2].NextValue;
+
+                var destVal = curValue == 1 ? maxValue : curValue - 1;
+                while(destVal == i1 || destVal == i2 || destVal == i3)
+                    destVal = destVal == 1 ? maxValue : destVal - 1;
 
                 //Remove
-                lookup[curValue].NextValue = lookup[valuesToRemove.Item3].NextValue;
+                lookup[curValue].NextValue = lookup[i3].NextValue;
                 //Insert
-                lookup[valuesToRemove.Item3].NextValue = lookup[destVal].NextValue;
-                lookup[destVal].NextValue = valuesToRemove.Item1;
+                lookup[i3].NextValue = lookup[destVal].NextValue;
+                lookup[destVal].NextValue = i1;
 
                 curValue = lookup[curValue].NextValue;
             }
@@ -82,16 +88,6 @@ namespace AdventOfCode.Y2020
 
             lookup[prevNumber].NextValue = lookup[input[0]].Value;
             return lookup;
-        }
-
-        private static int FindDestVal(int curValue, int maxVal, (int, int, int) exclude)
-        {
-            while(true)
-            {
-                curValue = curValue == 1 ? maxVal : curValue - 1;
-                if (exclude.Item1 != curValue && exclude.Item2 != curValue && exclude.Item3 != curValue)
-                    return curValue;
-            }
         }
 
         public override object SolvePart2(int[] input)
