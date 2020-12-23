@@ -13,16 +13,16 @@ namespace AdventOfCode.Y2020
         [DebuggerDisplay("{Value} ( Next = {Next.Value} )")]
         public class Cup
         {
-            public int Value { get; init; }
-            public Cup Next { get; set; }
+            public int Value;
+            public Cup Next;
 
-            public IEnumerable<Cup> Take(int nr)
+            public IEnumerable<Cup> Enumerate()
             {
-                var curCup = this;
-                for (int i = 0; i < nr; i++)
+                var cur = this;
+                while (true)
                 {
-                    yield return curCup;
-                    curCup = curCup.Next;
+                    yield return cur;
+                    cur = cur.Next;
                 }
             }
         }
@@ -31,7 +31,8 @@ namespace AdventOfCode.Y2020
         {
             var lookup = BuildCupList(input);
             Run(lookup, input[0], input.Max(), 100);
-            return string.Join("", lookup[1].Next.Take(8).Select(x => x.Value.ToString()));
+            
+            return string.Join("", lookup[1].Next.Enumerate().Take(8).Select(x => x.Value.ToString()));
         }
 
         private void Run(Dictionary<int, Cup> lookup, int firstValue, int maxValue, int iterations)
@@ -40,14 +41,12 @@ namespace AdventOfCode.Y2020
             
             for (int i = 0; i < iterations; i++)
             {
-                var cupsToRemove = curCup.Next.Take(3).ToList();
+                var cupsToRemove = new[] {curCup.Next, curCup.Next.Next, curCup.Next.Next.Next};
+                var destVal = FindDestVal(curCup.Value, maxValue, new []{ cupsToRemove[0].Value, cupsToRemove[1].Value, cupsToRemove[2].Value });
+                var destCup = lookup[destVal];
                 
                 //Remove
                 curCup.Next = cupsToRemove[2].Next;
-                
-                var destVal = FindDestVal(curCup.Value, maxValue, cupsToRemove.Select(x => x.Value).ToList());
-                var destCup = lookup[destVal];
-
                 //Insert
                 cupsToRemove[2].Next = destCup.Next;
                 destCup.Next = cupsToRemove[0];
@@ -77,12 +76,12 @@ namespace AdventOfCode.Y2020
             return lookup;
         }
 
-        private static int FindDestVal(int curValue, int maxVal, IList<int> exclude)
+        private static int FindDestVal(int curValue, int maxVal, int[] exclude)
         {
             while(true)
             {
                 curValue = curValue == 1 ? maxVal : curValue - 1;
-                if (!exclude.Contains(curValue))
+                if (Array.IndexOf(exclude, curValue) < 0)
                     return curValue;
             }
         }
@@ -98,7 +97,6 @@ namespace AdventOfCode.Y2020
         protected override int[] Parse()
         {
             return new[] { 8,7,1,3,6,9,4,5,2};
-            //return new int[] {3,8,9,1,2,5,4,6,7};
         }
     }
 }
