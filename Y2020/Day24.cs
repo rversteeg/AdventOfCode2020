@@ -21,22 +21,7 @@ namespace AdventOfCode.Y2020
 
         private static (int x, int y) GetOffset(Direction[] instructions)
         {
-            (int x, int y) result = (0, 0);
-            foreach (var instruction in instructions)
-            {
-                result = instruction switch
-                {
-                    Direction.E => (result.x + 1, result.y),
-                    Direction.Se => (result.x + 1, result.y - 1),
-                    Direction.Sw => (result.x, result.y - 1),
-                    Direction.W => (result.x - 1, result.y),
-                    Direction.Nw => (result.x - 1, result.y + 1),
-                    Direction.Ne => (result.x, result.y + 1),
-                    _ => throw new ArgumentOutOfRangeException()
-                };
-            }
-
-            return result;
+            return instructions.Aggregate((0, 0), (pos, instruction) => Move(pos, instruction));
         }
 
         private static (int x, int y) Move((int x, int y) pos, Direction dir)
