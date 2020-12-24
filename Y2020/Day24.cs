@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using AdventOfCode.Util;
@@ -16,12 +17,9 @@ namespace AdventOfCode.Y2020
 
         public override object SolvePart1(Direction[][] input)
         {
-            return input.Select(GetOffset).GroupBy(x => x).Count(x => x.Count() % 2 != 0);
-        }
-
-        private static (int x, int y) GetOffset(Direction[] instructions)
-        {
-            return instructions.Aggregate((0, 0), (pos, instruction) => Move(pos, instruction));
+            return input.Select(set => set.Aggregate((0, 0), Move))
+                .GroupBy(x => x)
+                .Count(x => x.Count() % 2 != 0);
         }
 
         private static (int x, int y) Move((int x, int y) pos, Direction dir)
@@ -46,8 +44,8 @@ namespace AdventOfCode.Y2020
 
         public override object SolvePart2(Direction[][] input)
         {
-            var blackTiles = input
-                .Select(GetOffset)
+            HashSet<(int x, int y)> blackTiles = input
+                .Select(set => set.Aggregate((0, 0), Move))
                 .GroupBy(x => x)
                 .Where(x => x.Count() % 2 != 0)
                 .Select(x => x.Key)
