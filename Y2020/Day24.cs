@@ -53,19 +53,31 @@ namespace AdventOfCode.Y2020
 
             for (int i = 0; i < 100; i++)
             {
-                var adjacencyMap =
-                    (from tile in blackTiles
-                        from direction in Directions
-                        let adjacent = (tile.x + direction.dX, tile.y + direction.dY)
-                        group adjacent by adjacent
-                        into grp
-                        select (grp.Key, grp.Count())).ToList();
+                var adjacencyMap = new Dictionary<(int x, int y), int>();
 
-                blackTiles = 
-                    (from adjacent in adjacencyMap
-                    where blackTiles.Contains(adjacent.Key) && (adjacent.Item2 == 1 || adjacent.Item2 == 2)
-                          || !blackTiles.Contains(adjacent.Key) && adjacent.Item2 == 2
-                    select adjacent.Key).ToHashSet();
+                foreach (var tile in blackTiles)
+                {
+                    foreach (var direction in Directions)
+                    {
+                        var newTile = (tile.x + direction.dX, tile.y + direction.dY);
+                        if (adjacencyMap.ContainsKey(newTile))
+                            adjacencyMap[newTile]++;
+                        else
+                            adjacencyMap[newTile] = 1;
+                    }
+                }
+
+                var newBlackTiles = new HashSet<(int x, int y)>();
+
+                foreach (var adjacent in adjacencyMap)
+                {
+                    if (adjacent.Value == 2 || adjacent.Value == 1 && blackTiles.Contains(adjacent.Key))
+                    {
+                        newBlackTiles.Add(adjacent.Key);
+                    }
+                }
+
+                blackTiles = newBlackTiles;
             }
             
             return blackTiles.Count();
