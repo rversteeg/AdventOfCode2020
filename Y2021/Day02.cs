@@ -14,9 +14,9 @@ namespace AdventOfCode.Y2021
         {
             var (x, y) = input.Aggregate<Day02Input,(int x, int y)>((0, 0), (acc, day02Input) => day02Input switch
             {
-                (Direction.Forward, var amount) => (acc.x + amount, acc.y),
-                (Direction.Up, var amount) => (acc.x, acc.y - amount),
-                (Direction.Down, var amount) => (acc.x, acc.y + amount)
+                (Direction.Forward, var units) => (acc.x + units, acc.y),
+                (Direction.Up, var units) => (acc.x, acc.y - units),
+                (Direction.Down, var units) => (acc.x, acc.y + units)
             });
 
             return x * y;
@@ -26,9 +26,9 @@ namespace AdventOfCode.Y2021
         {
             var (x, y, aim) = input.Aggregate<Day02Input,(int x, int y, int aim)>((0, 0, 0), (acc, day02Input) => day02Input switch
             {
-                (Direction.Forward, var amount) => (acc.x + amount, acc.y + acc.aim*amount, acc.aim),
-                (Direction.Up, var amount) => (acc.x, acc.y, acc.aim-amount),
-                (Direction.Down, var amount) => (acc.x, acc.y, acc.aim+amount)
+                (Direction.Forward, var units) => (acc.x + units, acc.y + acc.aim*units, acc.aim),
+                (Direction.Up, var units) => (acc.x, acc.y, acc.aim-units),
+                (Direction.Down, var units) => (acc.x, acc.y, acc.aim+units)
             });
 
             return x * y;
@@ -49,7 +49,7 @@ namespace AdventOfCode.Y2021
         }
     }
     
-    public record Day02Input(Direction Direction, int Amount);
+    public record Day02Input(Direction Direction, int Units);
 
     public enum Direction
     {
