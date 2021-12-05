@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AdventOfCode.Util;
 
 namespace AdventOfCode.Y2021
@@ -47,12 +48,9 @@ namespace AdventOfCode.Y2021
             yield return curPoint;
         }
 
+        private static readonly Regex ParseRegex = new(@"(\d+),(\d+) -> (\d+),(\d+)", RegexOptions.Compiled);
         public static LineSegment Parse(string line)
-        {
-            var pointStrings = line.Split(" -> ");
-            var p1Coords = pointStrings[0].Split(",").Select(int.Parse).ToList();
-            var p2Coords = pointStrings[1].Split(",").Select(int.Parse).ToList();
-            return new LineSegment(new Point(p1Coords[0], p1Coords[1]), new Point(p2Coords[0], p2Coords[1]));
-        }
+            => line.Parse( ParseRegex,
+                (int x1, int y1, int x2, int y2) => new LineSegment(new Point(x1, y1), new Point(x2, y2)));
     }
 }
