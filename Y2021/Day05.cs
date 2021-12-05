@@ -25,7 +25,7 @@ namespace AdventOfCode.Y2021
             => ReadAllInputLines().Select(LineSegment.Parse);
     }
 
-    public record Point(int X, int Y);
+    public record Point(long X, long Y);
 
     public record LineSegment(Point P1, Point P2)
     {
@@ -51,6 +51,6 @@ namespace AdventOfCode.Y2021
         private static readonly Regex ParseRegex = new(@"(\d+),(\d+) -> (\d+),(\d+)", RegexOptions.Compiled);
         public static LineSegment Parse(string line)
             => line.Parse( ParseRegex,
-                (int x1, int y1, int x2, int y2) => new LineSegment(new Point(x1, y1), new Point(x2, y2)));
+                (long x1, long y1, long x2, long y2) => new LineSegment(new Point(x1, y1), new Point(x2, y2)));
     }
 }
