@@ -14,5 +14,11 @@ namespace AdventOfCode.Util
 
         public static IEnumerator<int> GetEnumerator(this Range range)
             => Enumerable.Range(range.Start.Value, range.End.Value - range.Start.Value).GetEnumerator();
+
+        public static IEnumerable<TResult> Select<TResult>(this Range range, Func<int, TResult> selectFun)
+            => Enumerable.Range(range.Start.Value, range.End.Value - range.Start.Value).Select(selectFun);
+        
+        public static IEnumerable<TResult> Select<TResult>(this Range range, Func<int, int, TResult> selectFun)
+            => Enumerable.Range(range.Start.Value, range.End.Value - range.Start.Value).Select(selectFun);
     }
 }
