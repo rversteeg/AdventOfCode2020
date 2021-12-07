@@ -61,12 +61,12 @@ Part2: {part2Answer} ( Took {part2Time} )
                 select solution;
         }
 
-        public static readonly IDictionary<int, IPuzzleSolution> Solutions = GetSolutions(2020).ToDictionary(x => x.Day);
+        public static readonly IDictionary<int, IPuzzleSolution> Solutions = GetSolutions(2021).ToDictionary(x => x.Day);
     }
 
     public class Benchmark
     {
-        [Params(22)]
+        [Params(6)]
         public int Day { get; set; }
 
         [Benchmark]

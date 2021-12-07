@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using AdventOfCode.Util;
 
 namespace AdventOfCode.Y2021
@@ -8,8 +9,12 @@ namespace AdventOfCode.Y2021
         public Day06() : base(6, 2021){}
         public override object SolvePart1(int[] input)
         {
-            return Solve(input, 80);
+            Cache = Enumerable.Range(0, 9).ToDictionary(x => (x, 1), x => x == 0 ? 2L : 1L);
+            return Solve2(input, 80);
         }
+
+        private long Solve2(int[] input, int days)
+            => input.Sum(x => NrReproduction((x, days)));
 
         private static long Solve(int[] input, int days)
         {
@@ -30,9 +35,26 @@ namespace AdventOfCode.Y2021
             return fish.Values.Sum();
         }
 
+        private Dictionary<(int stage, int days), long> Cache =
+            Enumerable.Range(0, 9).ToDictionary(x => (x, 1), x => x == 0 ? 2L : 1L);
+
+        private long NrReproduction((int stage, int days) input)
+        {
+            if (Cache.ContainsKey(input))
+                return Cache[input];
+
+            long value =
+                input.stage == 0
+                    ? NrReproduction((6, input.days - 1)) + NrReproduction((8, input.days - 1))
+                    : NrReproduction((input.stage - 1, input.days - 1));
+            Cache[input] = value;
+            return value;
+        }
+
         public override object SolvePart2(int[] input)
         {
-            return Solve(input, 256);
+            Cache = Enumerable.Range(0, 9).ToDictionary(x => (x, 1), x => x == 0 ? 2L : 1L);
+            return Solve2(input, 256);
         }
 
         protected override int[] Parse()

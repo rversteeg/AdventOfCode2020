@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace AdventOfCode.Util
@@ -10,5 +11,8 @@ namespace AdventOfCode.Util
             var hashSet = other.ToHashSet();
             return collection.Where(x => !hashSet.Contains(x));
         }
+
+        public static IEnumerator<int> GetEnumerator(this Range range)
+            => Enumerable.Range(range.Start.Value, range.End.Value - range.Start.Value).GetEnumerator();
     }
 }
