@@ -20,7 +20,7 @@ namespace AdventOfCode
             {
                 var allDays = GetSolutions(2021).OrderByDescending(x => x.Day);
 
-                foreach (var day in allDays)
+                foreach (var day in allDays.Take(1))
                 {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
