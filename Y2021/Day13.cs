@@ -75,7 +75,7 @@ namespace AdventOfCode.Y2021
             return new Input(pointLines
                     .Select(line => line.Parse(pointRegex, (int x, int y) => (x, y))).ToHashSet(),
                 instructionLines
-                    .Select(line => line.Parse<(char,int), string, int>(instructionRegex, (axis, number)=>(axis[0], number)))
+                    .Select(line => line.Parse(instructionRegex, (char axis, int number)=>(axis, number)))
                     .ToList());
         }
     }
