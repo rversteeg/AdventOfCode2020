@@ -2,6 +2,7 @@
 {
     public abstract class PuzzleSolutionWithParsedInput<TInput> : PuzzleSolutionBase
     {
+        protected PuzzleSolutionWithParsedInput() {}
         protected PuzzleSolutionWithParsedInput(int day, int year) : base(day, year) {}
 
         public abstract object SolvePart1(TInput input);

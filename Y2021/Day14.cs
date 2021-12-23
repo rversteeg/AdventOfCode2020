@@ -9,8 +9,6 @@ namespace AdventOfCode.Y2021
 {
     public class Day14 : PuzzleSolutionWithParsedInput<(string Start, IEnumerable<(char P1, char P2, char Insert)> Rules)>
     {
-        public Day14() : base(14, 2021) {}
-
         private static readonly Dictionary<char, long> Empty = new();
 
         public override object SolvePart1((string Start, IEnumerable<(char P1, char P2, char Insert)> Rules) input)

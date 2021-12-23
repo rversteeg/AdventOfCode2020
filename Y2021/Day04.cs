@@ -8,7 +8,6 @@ namespace AdventOfCode.Y2021
     public class Day04 : PuzzleSolutionWithLinesInput
     {
         private const int CardSize = 5;
-        public Day04() : base(4, 2021) { }
 
         public override object SolvePart1(string[] input)
         {

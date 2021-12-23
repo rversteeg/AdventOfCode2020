@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Text.RegularExpressions;
 
 namespace AdventOfCode.Util
 {
@@ -7,6 +9,24 @@ namespace AdventOfCode.Util
     {
         public int Day { get; }
         public int Year { get; }
+
+        protected PuzzleSolutionBase()
+        {
+            (Day, Year) = GetDayAndYearFromName();
+        }
+
+        private (int Day, int Year) GetDayAndYearFromName()
+        {
+            var type = GetType();
+            var dayMatch = Regex.Match(type.Name, @"^Day(?<day>\d{2})$");
+            var yearMatch = Regex.Match(type.Namespace, @"^AdventOfCode.Y(?<year>\d{4})$");
+
+            if (!dayMatch.Success || !yearMatch.Success)
+                throw new Exception("Invalid naming convention");
+
+            return (Int32.Parse(dayMatch.Groups["day"].Value.TrimStart('0')),
+                Int32.Parse(yearMatch.Groups["year"].Value));
+        }
 
         protected PuzzleSolutionBase(int day, int year)
         {

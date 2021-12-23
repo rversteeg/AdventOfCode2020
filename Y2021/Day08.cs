@@ -19,10 +19,6 @@ namespace AdventOfCode.Y2021
                 => String.Join("", input.OrderBy(x => x));
         }
 
-        public Day08() : base(8, 2021)
-        {
-        }
-
         private readonly int[] _uniqueLengths = new[] { 2, 3, 4, 7 };
         public override object SolvePart1(IEnumerable<Input> input)
             => input.SelectMany(x=>x.Output).Count(x => _uniqueLengths.Contains(x.Length));

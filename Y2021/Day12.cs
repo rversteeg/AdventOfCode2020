@@ -7,8 +7,6 @@ namespace AdventOfCode.Y2021
 {
     public class Day12 : PuzzleSolutionWithParsedInput<IEnumerable<(string @from, string to)>>
     {
-        public Day12() : base(12, 2021) { }
-
         public override object SolvePart1(IEnumerable<(string @from, string to)> input)
         {
             var nodes = BuildNodes(input);

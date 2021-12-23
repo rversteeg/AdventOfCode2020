@@ -6,8 +6,6 @@ namespace AdventOfCode.Y2021
 {
     public class Day01 : PuzzleWithInt32Input
     {
-        public Day01() : base(1, 2021) {}
-
         public override object SolvePart1(int[] input)
         {
             var result = 0;

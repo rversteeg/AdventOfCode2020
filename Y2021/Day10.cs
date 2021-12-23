@@ -7,10 +7,6 @@ namespace AdventOfCode.Y2021
 {
     public class Day10 : PuzzleSolutionWithLinesInput
     {
-        public Day10() : base(10, 2021)
-        {
-        }
-
         public override object SolvePart1(string[] input)
         {
             return input.Select(CheckLine).Where(x => x.corrupt).Select(x=>CharScore(x.firstInvalidChar)).Sum();

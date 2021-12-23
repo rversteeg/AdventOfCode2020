@@ -6,7 +6,6 @@ namespace AdventOfCode.Y2021
 {
     public class Day06 : PuzzleSolutionWithParsedInput<int[]>
     {
-        public Day06() : base(6, 2021){}
         public override object SolvePart1(int[] input)
         {
             Cache = Enumerable.Range(0, 9).ToDictionary(x => (x, 1), x => x == 0 ? 2L : 1L);

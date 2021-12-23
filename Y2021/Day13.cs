@@ -10,8 +10,6 @@ namespace AdventOfCode.Y2021
     {
         public record Input(HashSet<(int X, int Y)> Points, IEnumerable<(char Dir, int Num)> Instructions);
 
-        public Day13() : base(13, 2021) {}
-
         public override object SolvePart1(Input input)
         {
             return Fold(input.Points, input.Instructions.First()).Count;

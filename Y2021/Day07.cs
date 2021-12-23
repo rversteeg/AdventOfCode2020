@@ -6,7 +6,6 @@ namespace AdventOfCode.Y2021
 {
     public class Day07 : PuzzleSolutionWithParsedInput<int[]>
     {
-        public Day07() : base(7, 2021){}
 
         public override object SolvePart1(int[] input)
             => Solve(input, x => x);

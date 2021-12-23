@@ -5,10 +5,6 @@ namespace AdventOfCode.Y2021
 {
     public class Day09 : PuzzleSolutionWithParsedInput<char[][]>
     {
-        public Day09() : base(9, 2021)
-        {
-        }
-
         public override object SolvePart1(char[][] input)
         {
             var width = input[0].Length;

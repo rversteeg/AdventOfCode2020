@@ -7,8 +7,6 @@ namespace AdventOfCode.Y2021
 {
     public class Day05 : PuzzleSolutionWithParsedInput<IEnumerable<LineSegment>>
     {
-        public Day05() : base(5, 2021){}
-
         public override object SolvePart1(IEnumerable<LineSegment> input)
             => input.Where(line => line.IsHorizontal || line.IsVertical)
                 .SelectMany(line => line.ToPoints())
