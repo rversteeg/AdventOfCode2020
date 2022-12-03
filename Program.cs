@@ -18,9 +18,9 @@ namespace AdventOfCode
             }
             else
             {
-                var allDays = GetSolutions(2021).OrderByDescending(x => x.Day);
+                var allDays = GetSolutions(2022).OrderByDescending(x => x.Day);
 
-                foreach (var day in allDays.Take(1))
+                foreach (var day in allDays)
                 {
                     Stopwatch sw = new Stopwatch();
                     sw.Start();
