@@ -18,7 +18,7 @@ namespace AdventOfCode
             }
             else
             {
-                var allDays = GetSolutions(2022).OrderByDescending(x => x.Day);
+                var allDays = GetSolutions(2023).OrderByDescending(x => x.Day);
 
                 foreach (var day in allDays)
                 {
