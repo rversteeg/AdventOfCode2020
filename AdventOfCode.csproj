@@ -2,15 +2,15 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <AssemblyName>AdventOfCode</AssemblyName>
     <RootNamespace>AdventOfCode</RootNamespace>
-    <LangVersion>10</LangVersion>
+    <LangVersion>12</LangVersion>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="BenchmarkDotNet" Version="0.12.1" />
-    <PackageReference Include="Microsoft.Extensions.Primitives" Version="5.0.0" />
+    <PackageReference Include="BenchmarkDotNet" Version="0.13.10" />
+    <PackageReference Include="Microsoft.Extensions.Primitives" Version="8.0.0" />
   </ItemGroup>
 
   <ItemGroup>

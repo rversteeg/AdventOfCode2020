@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace AdventOfCode.Util
+﻿namespace AdventOfCode.Util
 {
     public abstract class PuzzleSolutionWithLinesInput : PuzzleSolutionWithParsedInput<string[]>
     {

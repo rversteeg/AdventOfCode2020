@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using System.Text.RegularExpressions;
 using AdventOfCode.Util;
 
 namespace AdventOfCode.Y2021

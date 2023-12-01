@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using AdventOfCode.Util;
-using CommandLine;
 
 namespace AdventOfCode.Y2023;
 
@@ -42,26 +39,63 @@ public class Day01 : PuzzleSolutionWithLinesInput
 
     public override object SolvePart2(string[] input)
     {
-        return input.Select(line => ValueIndexes(line).OrderBy(x => x.Item1))
-            .Select(ind => $"{ind.First().Item2}{ind.Last().Item2}")
-            .Select(Int32.Parse)
-            .Sum();
+        return input.Select(line => FirstNumber(line) * 10 + LastNumber(line)).Sum();
     }
 
-    private IEnumerable<(int, int)> ValueIndexes(string input)
+    private int FirstNumber(ReadOnlySpan<char> input)
     {
-        return values.SelectMany(x => Indexes(x.Item1, input).Select(y => (y, x.Item2)));
+        while (input.Length > 0)
+        {
+            if (input.StartsWith("1") || input.StartsWith("one"))
+                return 1;
+            if (input.StartsWith("2") || input.StartsWith("two"))
+                return 2;
+            if (input.StartsWith("3") || input.StartsWith("three"))
+                return 3;
+            if (input.StartsWith("4") || input.StartsWith("four"))
+                return 4;
+            if (input.StartsWith("5") || input.StartsWith("five"))
+                return 5;
+            if (input.StartsWith("6") || input.StartsWith("six"))
+                return 6;
+            if (input.StartsWith("7") || input.StartsWith("seven"))
+                return 7;
+            if (input.StartsWith("8") || input.StartsWith("eight"))
+                return 8;
+            if (input.StartsWith("9") || input.StartsWith("nine"))
+                return 9;
+
+            input = input[1..];
+        }
+
+        throw new Exception("Invalid");
     }
     
-    private IEnumerable<int> Indexes(char needle, string haystack)
+    private int LastNumber(ReadOnlySpan<char> line)
     {
-        yield return haystack.IndexOf(needle);
-        yield return haystack.LastIndexOf(needle);
-    }
+        for (int i = 1; i <= line.Length; i++)
+        {
+            var input = line.Slice(line.Length - i);
+            if (input.StartsWith("1") || input.StartsWith("one"))
+                return 1;
+            if (input.StartsWith("2") || input.StartsWith("two"))
+                return 2;
+            if (input.StartsWith("3") || input.StartsWith("three"))
+                return 3;
+            if (input.StartsWith("4") || input.StartsWith("four"))
+                return 4;
+            if (input.StartsWith("5") || input.StartsWith("five"))
+                return 5;
+            if (input.StartsWith("6") || input.StartsWith("six"))
+                return 6;
+            if (input.StartsWith("7") || input.StartsWith("seven"))
+                return 7;
+            if (input.StartsWith("8") || input.StartsWith("eight"))
+                return 8;
+            if (input.StartsWith("9") || input.StartsWith("nine"))
+                return 9;
+        }
 
-    private IEnumerable<int> Indexes(string needle, string haystack)
-    {
-        yield return haystack.IndexOf(needle);
-        yield return haystack.LastIndexOf(needle);
+        throw new Exception("Invalid");
     }
 }

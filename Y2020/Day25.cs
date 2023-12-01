@@ -1,5 +1,4 @@
-﻿using System;
-using AdventOfCode.Util;
+﻿using AdventOfCode.Util;
 
 namespace AdventOfCode.Y2020
 {
