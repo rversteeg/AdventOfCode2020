@@ -12,15 +12,11 @@ public class Day02 : PuzzleSolutionWithParsedInput<IList<Day02.Game>>
     public record Game(int Id, IEnumerable<Subset> Subsets);
 
     public override object SolvePart1(IList<Game> input)
-    {
-        var possibleGames =
-            (from game in input
+        => (from game in input
                 where game.Subsets.All(subset => !subset.Cubes.Any(c =>
                     c is { Color: "red", Number: > 12 } or { Color: "green", Number: > 13 } or
                         { Color: "blue", Number: > 14 }))
-                select game).ToList();
-        return possibleGames.Select(x => x.Id).Sum();
-    }
+                select game).Select(x => x.Id).Sum();
 
     public override object SolvePart2(IList<Game> input)
     {
@@ -30,25 +26,22 @@ public class Day02 : PuzzleSolutionWithParsedInput<IList<Day02.Game>>
     }
 
     protected override IList<Game> Parse()
-    {
-        var lines = ReadAllInputLines().Select(x=>_parser.Parse(x)).ToList();
-        return lines;
-    }
+        => ReadAllInputLines().Select(x => Parser.Parse(x)).ToList();
     
-    private static Parser<(int, string)> _cubeParser =
+    private static readonly Parser<(int, string)> CubeParser =
         from leading in Sprache.Parse.WhiteSpace.Many()
         from number in Sprache.Parse.Number
         from ws in Sprache.Parse.WhiteSpace.Many()
         from color in Sprache.Parse.Letter.Many().Text()
         select (Int32.Parse(number), color);
 
-    private static Parser<Subset> _subsetParser =
-        from cubes in _cubeParser.DelimitedBy(Sprache.Parse.String(",").Token())
+    private static readonly Parser<Subset> SubsetParser =
+        from cubes in CubeParser.DelimitedBy(Sprache.Parse.String(",").Token())
         select new Subset(cubes.ToList());
         
-    private static Parser<Game> _parser = from game in Sprache.Parse.String("Game ")
+    private static readonly Parser<Game> Parser = from game in Sprache.Parse.String("Game ")
         from number in Sprache.Parse.Number
         from filler in Sprache.Parse.String(":")
-        from subsets in _subsetParser.DelimitedBy(Sprache.Parse.String(";").Token())
+        from subsets in SubsetParser.DelimitedBy(Sprache.Parse.String(";").Token())
         select new Game(Int32.Parse(number), subsets);
 }
