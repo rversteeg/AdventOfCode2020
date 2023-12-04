@@ -96,9 +96,9 @@ public class Day03 : PuzzleWithCharGrid
                 {
                     if (value > 0)
                     {
-                        edges.Add(new Point(x + 1, y -1));
-                        edges.Add(new Point(x + 1, y));
-                        edges.Add(new Point(x + 1, y + 1));
+                        edges.Add(new Point(x,y -1));
+                        edges.Add(new Point(x, y));
+                        edges.Add(new Point(x, y + 1));
                         yield return (value, edges);
                         edges = new List<Point>();
                         value = 0;
