@@ -15,7 +15,7 @@ public class Day01 : PuzzleSolutionWithLinesInput
         return numbers.Select(line => Int32.Parse($"{line.First()}{line.Last()}")).Sum();
     }
 
-    private (string, int)[] values =
+    private readonly (string, int)[] _values =
     {
         ("1", 1),
         ("2", 2),
@@ -46,24 +46,11 @@ public class Day01 : PuzzleSolutionWithLinesInput
     {
         while (input.Length > 0)
         {
-            if (input.StartsWith("1") || input.StartsWith("one"))
-                return 1;
-            if (input.StartsWith("2") || input.StartsWith("two"))
-                return 2;
-            if (input.StartsWith("3") || input.StartsWith("three"))
-                return 3;
-            if (input.StartsWith("4") || input.StartsWith("four"))
-                return 4;
-            if (input.StartsWith("5") || input.StartsWith("five"))
-                return 5;
-            if (input.StartsWith("6") || input.StartsWith("six"))
-                return 6;
-            if (input.StartsWith("7") || input.StartsWith("seven"))
-                return 7;
-            if (input.StartsWith("8") || input.StartsWith("eight"))
-                return 8;
-            if (input.StartsWith("9") || input.StartsWith("nine"))
-                return 9;
+            foreach (var val in _values)
+            {
+                if (input.StartsWith(val.Item1))
+                    return val.Item2;
+            }
 
             input = input[1..];
         }
@@ -76,24 +63,11 @@ public class Day01 : PuzzleSolutionWithLinesInput
         for (int i = 1; i <= line.Length; i++)
         {
             var input = line.Slice(line.Length - i);
-            if (input.StartsWith("1") || input.StartsWith("one"))
-                return 1;
-            if (input.StartsWith("2") || input.StartsWith("two"))
-                return 2;
-            if (input.StartsWith("3") || input.StartsWith("three"))
-                return 3;
-            if (input.StartsWith("4") || input.StartsWith("four"))
-                return 4;
-            if (input.StartsWith("5") || input.StartsWith("five"))
-                return 5;
-            if (input.StartsWith("6") || input.StartsWith("six"))
-                return 6;
-            if (input.StartsWith("7") || input.StartsWith("seven"))
-                return 7;
-            if (input.StartsWith("8") || input.StartsWith("eight"))
-                return 8;
-            if (input.StartsWith("9") || input.StartsWith("nine"))
-                return 9;
+            foreach (var val in _values)
+            {
+                if (input.StartsWith(val.Item1))
+                    return val.Item2;
+            }
         }
 
         throw new Exception("Invalid");
