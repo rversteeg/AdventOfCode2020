@@ -17,9 +17,9 @@ public class Day03 : PuzzleWithCharGrid
             bool isAdjecent = false;
             int value = 0;
             
-            for (int x = 0; x < input[0].Length; x++)
+            for (int x = 0; x <= input[0].Length; x++)
             {
-                if (!char.IsDigit(input[y][x]))
+                if (x == input[0].Length || !char.IsDigit(input[y][x]))
                 {
                     if (value > 0)
                     {
@@ -32,12 +32,6 @@ public class Day03 : PuzzleWithCharGrid
                 }
                 value = value * 10 + (input[y][x] - '0');
                 isAdjecent = isAdjecent || IsNextToSymbol(x, y, input);
-            }
-            
-            if (value > 0)
-            {
-                if (isAdjecent)
-                    total += value;
             }
         }
 
