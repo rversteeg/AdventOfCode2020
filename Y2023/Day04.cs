@@ -10,11 +10,11 @@ namespace AdventOfCode.Y2023;
 public class Day04 : PuzzleSolutionWithParsedInput<IList<Day04.Input>>
 {
     public override object SolvePart1(IList<Input> input)
-    {
-        var counts = input.Select(x => x.WinningNumbers.Intersect(x.MyNumbers).Count()).Where(x=>x>0).Select(x=>Math.Pow(2, x)/2).ToList();
-
-        return counts.Sum();
-    }
+        => input.Select(x => x.WinningNumbers.Intersect(x.MyNumbers).Count())
+            .Where(x => x > 0)
+            .Select(x => Math.Pow(2, x) / 2)
+            .Sum();
+    
     public override object SolvePart2(IList<Input> input)
     {
         var counts = Enumerable.Range(1, input.Count).ToDictionary(x => x, x => 1);
