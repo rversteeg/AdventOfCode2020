@@ -12,8 +12,18 @@ public class Day05 : PuzzleSolutionWithParser<Day05.Input>
     }
 
     protected override object SolvePart1(Input input)
+        => input.Seeds.Select(s => ApplyMappings(s, input.Mappings)).Min();
+
+    private static long ApplyMappings(long seed, Map[] mappings)
+        => mappings.Aggregate(seed, ApplyMapping);
+
+    private static long ApplyMapping(long seed, Map mapping)
     {
-        return 0;
+        var range = mapping.Ranges.FirstOrDefault(x => seed >= x.Source && seed < x.Source + x.Length);
+        if (range is null)
+            return seed;
+
+        return seed + range.Offset;
     }
 
     protected override object SolvePart2(Input input)
@@ -23,7 +33,11 @@ public class Day05 : PuzzleSolutionWithParser<Day05.Input>
 
     public record Input(long[] Seeds, Map[] Mappings);
     public record Map(string From, string To, MapRange[] Ranges);
-    public record MapRange(long Destination, long Source, long Length);
+
+    public record MapRange(long Destination, long Source, long Length)
+    {
+        public long Offset => Destination - Source;
+    }
 
     private static readonly Parser<MapRange> MapRangeParser = from dest in Parse.Number
         from ws1 in Parse.WhiteSpace
