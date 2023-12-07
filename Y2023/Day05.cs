@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using AdventOfCode.Util;
 using Sprache;
@@ -28,7 +29,20 @@ public class Day05 : PuzzleSolutionWithParser<Day05.Input>
 
     protected override object SolvePart2(Input input)
     {
+        var flatMap = input.Mappings.Aggregate(Merge);
         return 0;
+    }
+
+    private Map Merge(Map left, Map right)
+        => new Map(left.From, right.To, MergeRanges(left.Ranges, right.Ranges).ToArray());
+
+    private IEnumerable<MapRange> MergeRanges(MapRange[] leftRanges, MapRange[] rightRanges)
+    {
+        var orderedSource = rightRanges.OrderBy(x => x.Source).ToArray();
+        foreach (var origin in leftRanges.OrderBy(x => x.Destination))
+        {
+            
+        }
     }
 
     public record Input(long[] Seeds, Map[] Mappings);
