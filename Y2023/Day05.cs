@@ -38,10 +38,25 @@ public class Day05 : PuzzleSolutionWithParser<Day05.Input>
 
     private IEnumerable<MapRange> MergeRanges(MapRange[] leftRanges, MapRange[] rightRanges)
     {
-        var orderedSource = rightRanges.OrderBy(x => x.Source).ToArray();
-        foreach (var origin in leftRanges.OrderBy(x => x.Destination))
+        var leftOrdered = leftRanges.OrderBy(x => x.Source).ToList();
+
+        var leftRange = leftRanges.First();
+
+
+        foreach( var copy in rightRanges.Where(x => x.SourceEnd <= leftRange.Source))
         {
-            
+            yield return copy;
+        }
+
+        foreach (var partCopy in rightRanges.Where(x =>
+                     x.Source < leftRange.Source && x.SourceEnd >= leftRange.Source))
+        {
+            yield return partCopy with { Length = leftRange.Source - partCopy.Source };
+        }
+
+        foreach (var copy in rightRanges.Where(x => x.SourceEnd > leftRanges.Last().SourceEnd))
+        {
+            yield return copy;
         }
     }
 
@@ -51,6 +66,7 @@ public class Day05 : PuzzleSolutionWithParser<Day05.Input>
     public record MapRange(long Destination, long Source, long Length)
     {
         public long Offset => Destination - Source;
+        public long SourceEnd => Source + Length - 1;
     }
 
     private static readonly Parser<MapRange> MapRangeParser = from dest in Parse.Number
