@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using AdventOfCode.Util;
-using Xunit;
 
 namespace AdventOfCode.Y2023;
 

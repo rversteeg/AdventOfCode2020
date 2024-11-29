@@ -5,7 +5,7 @@ using AdventOfCode.Util;
 
 namespace AdventOfCode.Y2021
 {
-    public class Day14 : PuzzleSolutionWithParsedInput<(string Start, IEnumerable<(char P1, char P2, char Insert)> Rules)>
+    public partial class Day14 : PuzzleSolutionWithParsedInput<(string Start, IEnumerable<(char P1, char P2, char Insert)> Rules)>
     {
         private static readonly Dictionary<char, long> Empty = new();
 
@@ -56,15 +56,16 @@ namespace AdventOfCode.Y2021
 
         public override object SolvePart2((string Start, IEnumerable<(char P1, char P2, char Insert)> Rules) input)
             => Solve(input, 40);
-
+        
+        [GeneratedRegex("(.)(.) -> (.)")]
+        private static partial Regex GeneratedRegex();
+        
         protected override (string Start, IEnumerable<(char P1, char P2, char Insert)> Rules) Parse()
         {
             var lines = ReadAllInputLines();
-            var regex = new Regex("(.)(.) -> (.)");
-
             return (lines[0],
                 lines.Skip(2).Select(line =>
-                    line.Parse(regex,(char p1, char p2, char insert) => (p1, p2, insert))));
+                    line.Parse(GeneratedRegex(),(char p1, char p2, char insert) => (p1, p2, insert))));
         }
     }
 }
