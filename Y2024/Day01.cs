@@ -8,12 +8,7 @@ namespace AdventOfCode.Y2024;
 public class Day01 : PuzzleSolutionWithParsedInput<(List<int> left, List<int> right) >
 {
     public override object SolvePart1((List<int> left, List<int> right) input)
-    {
-        input.left.Sort();
-        input.right.Sort();
-
-        return input.left.Select((t, i) => Math.Abs(t - input.right[i])).Sum();
-    }
+        => input.left.Order().Zip(input.right.Order(), (l, r) => Math.Abs(l - r)).Sum();
 
     public override object SolvePart2((List<int> left, List<int> right)  input)
     {
