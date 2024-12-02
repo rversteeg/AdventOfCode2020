@@ -12,7 +12,7 @@ public class Day01 : PuzzleSolutionWithParsedInput<(List<int> left, List<int> ri
 
     public override object SolvePart2((List<int> left, List<int> right)  input)
     {
-        var lookup = input.right.GroupBy(x=>x).Select(x=>(x.Key, x.Count() * x.Key)).ToDictionary(x=>x.Key, x=>x.Item2);
+        var lookup = input.right.GroupBy(x=>x).ToDictionary(x=>x.Key, x=> x.Count() * x.Key);
         return input.left.Select(x=>lookup.GetValueOrDefault(x, 0)).Sum();
     }
 
