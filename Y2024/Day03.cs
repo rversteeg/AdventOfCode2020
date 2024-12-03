@@ -8,7 +8,10 @@ namespace AdventOfCode.Y2024;
 
 public partial class Day03 : PuzzleSolutionWithTextInput
 {
-    public override object SolvePart1(string input) => Part1Regex().Matches(input).Select(x=>Int32.Parse(x.Groups["left"].Value) * Int32.Parse(x.Groups["right"].Value)).Sum();
+    public override object SolvePart1(string input) 
+        => Part1Regex().Matches(input)
+            .Select(x=>Int32.Parse(x.Groups["left"].Value) * Int32.Parse(x.Groups["right"].Value))
+            .Sum();
 
     public override object SolvePart2(string input)
     {
