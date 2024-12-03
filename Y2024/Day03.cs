@@ -20,13 +20,13 @@ public partial class Day03 : PuzzleSolutionWithTextInput
         var sum = 0;
         foreach (Match match in matches)
         {
-            if(match.Value.Equals("do()"))
+            if(match.ValueSpan.Equals("do()".AsSpan(), StringComparison.Ordinal))
                 enabled = true;
-            else if (match.Value.Equals("don't()"))
+            else if (match.ValueSpan.Equals("don't()".AsSpan(), StringComparison.Ordinal))
                 enabled = false;
             else if (enabled)
             {
-                sum += Int32.Parse(match.Groups["left"].Value) * Int32.Parse(match.Groups["right"].Value);
+                sum += Int32.Parse(match.Groups["left"].ValueSpan) * Int32.Parse(match.Groups["right"].ValueSpan);
             }
         }
         return sum;
