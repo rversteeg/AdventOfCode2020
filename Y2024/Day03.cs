@@ -35,6 +35,6 @@ public partial class Day03 : PuzzleSolutionWithTextInput
     [GeneratedRegex(@"mul\((?<left>\d+),(?<right>\d+)\)")]
     private static partial Regex Part1Regex();
     
-    [GeneratedRegex(@"((mul\((?<left>\d+),(?<right>\d+)\))|(do\(\))|(don't\(\)))")]
+    [GeneratedRegex(@"mul\((?<left>\d+),(?<right>\d+)\)|do\(\)|don't\(\)")]
     private static partial Regex Part2Regex();
 }
