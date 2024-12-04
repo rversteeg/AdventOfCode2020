@@ -1,10 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using AdventOfCode.Util;
 
 namespace AdventOfCode.Y2024;
 
-public partial class Day04 : PuzzleWithCharGrid
+public class Day04 : PuzzleWithCharGrid
 {
     private static readonly (int xStep, int yStep)[] Directions =
     [
