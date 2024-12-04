@@ -18,9 +18,9 @@ public class Day04 : PuzzleWithCharGrid
     ];
 
     public override object SolvePart1(char[][] input)
-        => (from x in Enumerable.Range(0, input[0].Length)
-            from y in Enumerable.Range(0, input.Length)
-            select Directions.Count(dir => IsMatch(input, x, y, dir.xStep, dir.yStep))).Sum();
+        => EnumerableExtensions.RangeGrid(0, 0, input[0].Length, input.Length)
+            .Select(pos=>Directions.Count(dir => IsMatch(input, pos.X, pos.Y, dir.xStep, dir.yStep)))
+            .Sum();
 
     private const string TextToFind = "XMAS";
 
@@ -35,12 +35,10 @@ public class Day04 : PuzzleWithCharGrid
 
 
     public override object SolvePart2(char[][] input)
-        => (from x in Enumerable.Range(1, input[0].Length - 2)
-            from y in Enumerable.Range(1, input.Length - 2)
-            where input[y][x] == 'A'
-                  && (input[y - 1][x - 1] == 'M' && input[y + 1][x + 1] == 'S' ||
-                      input[y - 1][x - 1] == 'S' && input[y + 1][x + 1] == 'M')
-                  && (input[y - 1][x + 1] == 'M' && input[y + 1][x - 1] == 'S' ||
-                      input[y - 1][x + 1] == 'S' && input[y + 1][x - 1] == 'M')
-            select 1).Count();
+        => EnumerableExtensions.RangeGrid(1, 1, input[0].Length-2, input.Length-2)
+            .Count(pos => input[pos.Y][pos.X] == 'A'
+                          && (input[pos.Y - 1][pos.X - 1] == 'M' && input[pos.Y + 1][pos.X + 1] == 'S' ||
+                              input[pos.Y - 1][pos.X - 1] == 'S' && input[pos.Y + 1][pos.X + 1] == 'M')
+                          && (input[pos.Y - 1][pos.X + 1] == 'M' && input[pos.Y + 1][pos.X - 1] == 'S' ||
+                              input[pos.Y - 1][pos.X + 1] == 'S' && input[pos.Y + 1][pos.X - 1] == 'M'));
 }

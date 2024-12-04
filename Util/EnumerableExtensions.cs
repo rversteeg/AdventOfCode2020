@@ -20,5 +20,8 @@ namespace AdventOfCode.Util
         
         public static IEnumerable<TResult> Select<TResult>(this Range range, Func<int, int, TResult> selectFun)
             => Enumerable.Range(range.Start.Value, range.End.Value - range.Start.Value).Select(selectFun);
+        
+        public static IEnumerable<(int X, int Y)> RangeGrid(int startX, int startY, int xLength, int yLength)
+            => Enumerable.Range(startX, xLength).SelectMany(x => Enumerable.Range(startY, yLength).Select(y => (x, y)));
     }
 }
