@@ -23,5 +23,8 @@ namespace AdventOfCode.Util
         
         public static IEnumerable<(int X, int Y)> RangeGrid(int startX, int startY, int xLength, int yLength)
             => Enumerable.Range(startX, xLength).SelectMany(x => Enumerable.Range(startY, yLength).Select(y => (x, y)));
+        
+        public static IEnumerable<(int X, int Y)> RangeGrid(int width, int height)
+            => Enumerable.Range(0, width).SelectMany(x => Enumerable.Range(0, height).Select(y => (x, y)));
     }
 }
